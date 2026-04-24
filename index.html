@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartTools - All-in-one Platform</title>
+    <link rel="stylesheet" href="styles.css?v=30">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <script src="lib/marked.min.js"></script>
+    <script src="lib/qrcode.min.js"></script>
+    <script src="lib/jsQR.min.js"></script>
+</head>
+<body>
+    <div class="app-container">
+        <aside class="sidebar">
+            <div class="logo">
+                <div class="logo-icon"><i class="ph ph-magic-wand"></i></div>
+                <span class="logo-text">SmartTools</span>
+            </div>
+            <div class="sidebar-scroll">
+                <nav class="sidebar-nav">
+                    <a href="#" class="nav-item active" data-page="home"><i class="ph ph-house"></i><span>Your Everyday Tools</span></a>
+                    
+                    <div class="nav-section-label">CATEGORIES</div>
+                    <a href="#" class="nav-item" onclick="scrollToCat('cat-doc')"><i class="ph ph-file-text"></i><span>Document Conversion</span></a>
+                    <a href="#" class="nav-item" onclick="scrollToCat('cat-pdf')"><i class="ph ph-file-pdf"></i><span>PDF Tools</span></a>
+                    <a href="#" class="nav-item" onclick="scrollToCat('cat-img')"><i class="ph ph-image"></i><span>Image Tools</span></a>
+                    <a href="#" class="nav-item" onclick="scrollToCat('cat-text')"><i class="ph ph-brackets-curly"></i><span>Text & Data</span></a>
+                    <a href="#" class="nav-item" onclick="scrollToCat('cat-calc')"><i class="ph ph-calculator"></i><span>Calculators</span></a>
+                    <a href="#" class="nav-item" onclick="scrollToCat('cat-qr')"><i class="ph ph-qr-code"></i><span>QR Code</span></a>
+
+                    <div class="nav-section-label">ADVANCED</div>
+                    <a href="#" class="nav-item" data-page="edit" style=""><i class="ph ph-pencil-simple"></i><span>Edit PDF</span></a>
+                    <a href="#" class="nav-item" data-page="sign"><i class="ph ph-signature"></i><span>E-Sign</span></a>
+                    <a href="#" class="nav-item" data-page="ai-chat"><i class="ph ph-robot"></i><span>AI Chat</span></a>
+                    <a href="#" class="nav-item" data-page="ai-summarize"><i class="ph ph-magic-wand"></i><span>AI Summarize</span></a>
+                </nav>
+            </div>
+            <!-- Sidebar Footer: Theme Toggle -->
+            <div class="sidebar-footer">
+                <div class="theme-toggle-row">
+                    <i class="ph ph-sun theme-icon-sun"></i>
+                    <label class="theme-switch" title="Toggle dark/light theme">
+                        <input type="checkbox" id="theme-toggle-cb">
+                        <span class="theme-track">
+                            <span class="theme-thumb"></span>
+                        </span>
+                    </label>
+                    <i class="ph ph-moon theme-icon-moon"></i>
+                </div>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <div class="page-content active" id="page-home">
+                <div class="everytools-header">
+                    <div>
+                        <h1 class="hero-title">SmartTools</h1>
+                        <p class="hero-subtitle">All the utilities you need, in one place.</p>
+                    </div>
+                </div>
+                
+                <div class="everytools-dashboard">
+                    <!-- Document Conversion -->
+                    <div class="et-category" id="cat-doc">
+                        <h2 class="et-cat-title">Document Conversion</h2>
+                        <div class="et-grid">
+                            <div class="et-card" onclick="openGenericTool('files-to-pdf')">
+                                <div class="et-icon indigo"><i class="ph ph-files"></i></div>
+                                <div class="et-info"><h3>Files to PDF</h3><p>Convert images and text files to PDF</p></div>
+                            </div>
+                            <div class="et-card" onclick="openGenericTool('pdf-to-word')">
+                                <div class="et-icon indigo"><i class="ph ph-file-doc"></i></div>
+                                <div class="et-info"><h3>PDF to Word</h3><p>Convert PDF to Word document</p></div>
+                            </div>
+                            <div class="et-card" onclick="openGenericTool('pdf-to-images')">
+                                <div class="et-icon indigo"><i class="ph ph-images"></i></div>
+                                <div class="et-info"><h3>PDF to Images</h3><p>Convert PDF pages to images</p></div>
+                            </div>
+                            <div class="et-card" onclick="openGenericTool('pdf-to-text')">
+                                <div class="et-icon indigo"><i class="ph ph-text-aa"></i></div>
+                                <div class="et-info"><h3>PDF to Text</h3><p>Extract text content from PDF</p></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- PDF Tools -->
+                    <div class="et-category" id="cat-pdf">
+                        <h2 class="et-cat-title"><i class="ph ph-file-pdf"></i> PDF Tools</h2>
+                        <div class="et-grid">
+                            <div class="et-card" onclick="switchPage('organize')">
+                                <div class="et-icon red"><i class="ph ph-squares-four"></i></div>
+                                <div class="et-info"><h3>Merge PDFs</h3><p>Combine multiple PDFs into one</p></div>
+                            </div>
+                            <div class="et-card" onclick="openGenericTool('split-pdf')">
+                                <div class="et-icon red"><i class="ph ph-scissors"></i></div>
+                                <div class="et-info"><h3>Split PDF</h3><p>Split PDF into individual pages</p></div>
+                            </div>
+                            <div class="et-card" onclick="switchPage('compress')">
+                                <div class="et-icon red"><i class="ph ph-arrows-in"></i></div>
+                                <div class="et-info"><h3>Compress PDF</h3><p>Reduce PDF file size</p></div>
+                            </div>
+                            <div class="et-card" onclick="openGenericTool('rotate-pdf')">
+                                <div class="et-icon red"><i class="ph ph-arrow-clockwise"></i></div>
+                                <div class="et-info"><h3>Rotate PDF</h3><p>Rotate PDF pages</p></div>
+                            </div>
+                            <div class="et-card" onclick="openGenericTool('resize-pdf')">
+                                <div class="et-icon red"><i class="ph ph-corners-out"></i></div>
+                                <div class="et-info"><h3>Resize PDF</h3><p>Change PDF page dimensions</p></div>
+                            </div>
+                            <div class="et-card" onclick="openGenericTool('page-numbers')">
+                                <div class="et-icon red"><i class="ph ph-list-numbers"></i></div>
+                                <div class="et-info"><h3>Page Numbers</h3><p>Add page numbers to PDF</p></div>
+                            </div>
+                            <div class="et-card" onclick="openGenericTool('delete-pages')">
+                                <div class="et-icon red"><i class="ph ph-trash"></i></div>
+                                <div class="et-info"><h3>Delete Pages</h3><p>Remove specific pages from PDF</p></div>
+                            </div>
+                            <div class="et-card" onclick="openGenericTool('extract-pages')">
+                                <div class="et-icon red"><i class="ph ph-arrow-square-out"></i></div>
+                                <div class="et-info"><h3>Extract Pages</h3><p>Extract selected pages to a new PDF</p></div>
+                            </div>
+                            <div class="et-card" onclick="openGenericTool('extract-images')">
+                                <div class="et-icon red"><i class="ph ph-image"></i></div>
+                                <div class="et-info"><h3>Extract Images</h3><p>Extract images from PDF</p></div>
+                            </div>
+                            <div class="et-card" onclick="openGenericTool('protect-pdf')">
+                                <div class="et-icon red"><i class="ph ph-lock-key"></i></div>
+                                <div class="et-info"><h3>Protect PDF</h3><p>Add password protection to PDF</p></div>
+                            </div>
+                            <div class="et-card" onclick="openGenericTool('unlock-pdf')">
+                                <div class="et-icon red"><i class="ph ph-lock-key-open"></i></div>
+                                <div class="et-info"><h3>Unlock PDF</h3><p>Remove PDF password</p></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Image Tools -->
+                    <div class="et-category" id="cat-img">
+                        <h2 class="et-cat-title"><i class="ph ph-image"></i> Image Tools</h2>
+                        <div class="et-grid">
+                            <div class="et-card" onclick="openGenericTool('resize-image')">
+                                <div class="et-icon amber"><i class="ph ph-arrows-out"></i></div>
+                                <div class="et-info"><h3>Resize Image</h3><p>Resize by percentage or dimensions</p></div>
+                            </div>
+                            <div class="et-card" onclick="openGenericTool('compress-image')">
+                                <div class="et-icon amber"><i class="ph ph-arrows-in"></i></div>
+                                <div class="et-info"><h3>Compress Image</h3><p>Reduce image file size</p></div>
+                            </div>
+                            <div class="et-card" onclick="openGenericTool('convert-format')">
+                                <div class="et-icon amber"><i class="ph ph-arrows-left-right"></i></div>
+                                <div class="et-info"><h3>Convert Format</h3><p>Convert between image formats</p></div>
+                            </div>
+                            <div class="et-card" onclick="openGenericTool('remove-background')">
+                                <div class="et-icon amber"><i class="ph ph-eraser"></i></div>
+                                <div class="et-info"><h3>Remove Background</h3><p>Remove image background</p></div>
+                            </div>
+                            <div class="et-card" onclick="openGenericTool('crop-image')">
+                                <div class="et-icon amber"><i class="ph ph-crop"></i></div>
+                                <div class="et-info"><h3>Crop Image</h3><p>Crop images to specific dimensions</p></div>
+                            </div>
+                            <div class="et-card" onclick="openGenericTool('rotate-flip')">
+                                <div class="et-icon amber"><i class="ph ph-arrows-clockwise"></i></div>
+                                <div class="et-info"><h3>Rotate / Flip</h3><p>Rotate or flip images</p></div>
+                            </div>
+                            <div class="et-card" onclick="openGenericTool('add-watermark-image')">
+                                <div class="et-icon amber"><i class="ph ph-drop"></i></div>
+                                <div class="et-info"><h3>Add Watermark</h3><p>Add text watermark to images</p></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Text & Data -->
+                    <div class="et-category" id="cat-text">
+                        <h2 class="et-cat-title"><i class="ph ph-brackets-curly"></i> Text & Data</h2>
+                        <div class="et-grid">
+                            <div class="et-card" onclick="openGenericTool('json-formatter')">
+                                <div class="et-icon emerald"><i class="ph ph-code"></i></div>
+                                <div class="et-info"><h3>JSON Formatter</h3><p>Format and validate JSON</p></div>
+                            </div>
+                            <div class="et-card" onclick="openGenericTool('csv-json')">
+                                <div class="et-icon emerald"><i class="ph ph-table"></i></div>
+                                <div class="et-info"><h3>CSV / JSON</h3><p>Convert between CSV and JSON</p></div>
+                            </div>
+                            <div class="et-card" onclick="openGenericTool('base64')">
+                                <div class="et-icon emerald"><i class="ph ph-hash"></i></div>
+                                <div class="et-info"><h3>Base64</h3><p>Encode and decode Base64</p></div>
+                            </div>
+                            <div class="et-card" onclick="openGenericTool('url-encode')">
+                                <div class="et-icon emerald"><i class="ph ph-link"></i></div>
+                                <div class="et-info"><h3>URL Encode</h3><p>Encode and decode URLs</p></div>
+                            </div>
+                            <div class="et-card" onclick="openGenericTool('word-counter')">
+                                <div class="et-icon emerald"><i class="ph ph-text-t"></i></div>
+                                <div class="et-info"><h3>Word Counter</h3><p>Count words, characters, sentences</p></div>
+                            </div>
+                            <div class="et-card" onclick="openGenericTool('markdown-preview')">
+                                <div class="et-icon emerald"><i class="ph ph-markdown-logo"></i></div>
+                                <div class="et-info"><h3>Markdown Preview</h3><p>Preview Markdown as HTML</p></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Calculators -->
+                    <div class="et-category" id="cat-calc">
+                        <h2 class="et-cat-title"><i class="ph ph-calculator"></i> Calculators</h2>
+                        <div class="et-grid">
+                            <div class="et-card" onclick="openGenericTool('calculator')">
+                                <div class="et-icon violet"><i class="ph ph-calculator"></i></div>
+                                <div class="et-info"><h3>Calculator</h3><p>Basic and scientific calculator</p></div>
+                            </div>
+                            <div class="et-card" onclick="openGenericTool('unit-converter')">
+                                <div class="et-icon violet"><i class="ph ph-arrows-left-right"></i></div>
+                                <div class="et-info"><h3>Unit Converter</h3><p>Convert between units of measurement</p></div>
+                            </div>
+                            <div class="et-card" onclick="openGenericTool('color-converter')">
+                                <div class="et-icon violet"><i class="ph ph-palette"></i></div>
+                                <div class="et-info"><h3>Color Converter</h3><p>Convert HEX, RGB, HSL colors</p></div>
+                            </div>
+                            <div class="et-card" onclick="openGenericTool('percentage-calc')">
+                                <div class="et-icon violet"><i class="ph ph-percent"></i></div>
+                                <div class="et-info"><h3>Percentage Calc</h3><p>Calculate percentages easily</p></div>
+                            </div>
+                            <div class="et-card" onclick="openGenericTool('date-calculator')">
+                                <div class="et-icon violet"><i class="ph ph-calendar-blank"></i></div>
+                                <div class="et-info"><h3>Date Calculator</h3><p>Calculate date differences</p></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- QR Code -->
+                    <div class="et-category" id="cat-qr">
+                        <h2 class="et-cat-title"><i class="ph ph-qr-code"></i> QR Code</h2>
+                        <div class="et-grid">
+                            <div class="et-card" onclick="openGenericTool('generate-qr')">
+                                <div class="et-icon cyan"><i class="ph ph-qr-code"></i></div>
+                                <div class="et-info"><h3>Generate QR</h3><p>Create QR codes from text or URLs</p></div>
+                            </div>
+                            <div class="et-card" onclick="openGenericTool('read-qr')">
+                                <div class="et-icon cyan"><i class="ph ph-scan"></i></div>
+                                <div class="et-info"><h3>Read QR</h3><p>Decode QR codes from images</p></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Generic Tool Page -->
+            <div class="page-content" id="page-generic-tool">
+                <div class="page-header">
+                    <button class="btn-back" onclick="switchPage('home')"><i class="ph ph-arrow-left"></i></button>
+                    <div class="page-header-content">
+                        <h1 id="gt-title">Tool Title</h1>
+                        <p id="gt-desc">Tool description</p>
+                    </div>
+                </div>
+                <div class="generic-tool-container" id="gt-container">
+                    <!-- Dynamic content injected by app.js -->
+                </div>
+            </div>
+
+            <div class="page-content" id="page-compress">
+                <div class="page-header">
+                    <button class="btn-back" onclick="switchPage('home')"><i class="ph ph-arrow-left"></i></button>
+                    <div class="page-header-content"><h1>Compress Files</h1><p>Reduce file size while optimizing quality</p></div>
+                </div>
+                <div class="format-grid">
+                    <div class="format-card" data-compress="low">
+                        <div class="format-icon" style="background: linear-gradient(135deg, #10b981, #059669);"><i class="ph ph-feather"></i></div>
+                        <span>Low</span>
+                        <small style="color:var(--text-muted);font-size:11px;">Best quality</small>
+                    </div>
+                    <div class="format-card active" data-compress="medium">
+                        <div class="format-icon" style="background: linear-gradient(135deg, #6366f1, #8b5cf6);"><i class="ph ph-gauge"></i></div>
+                        <span>Medium</span>
+                        <small style="color:var(--text-muted);font-size:11px;">Recommended</small>
+                    </div>
+                    <div class="format-card" data-compress="high">
+                        <div class="format-icon" style="background: linear-gradient(135deg, #f59e0b, #ef4444);"><i class="ph ph-lightning"></i></div>
+                        <span>High</span>
+                        <small style="color:var(--text-muted);font-size:11px;">Smallest size</small>
+                    </div>
+                </div>
+                <div class="supported-formats">
+                    <span class="sf-label">Compress formats:</span>
+                    <span class="format-badge badge-pdf">PDF</span>
+                    <span class="format-badge badge-png">PNG</span>
+                    <span class="format-badge badge-jpg">JPG</span>
+                    <span class="format-badge badge-txt">TXT</span>
+                </div>
+                <div class="source-detected" id="compress-source-detected" style="display:none;">
+                    <i class="ph ph-check-circle"></i><span>Detected:</span><span class="format-badge" id="compress-source-badge"></span>
+                </div>
+                <div class="upload-zone" id="compress-upload">
+                    <div class="upload-zone-content">
+                        <div class="upload-zone-icon"><i class="ph ph-upload-simple"></i></div>
+                        <h3>Drop PDF, Image, or Text files here</h3>
+                        <p>or click to browse files</p>
+                        <div class="accepted-formats">
+                            <span class="format-badge pdf">PDF</span>
+                            <span class="format-badge image">PNG</span>
+                            <span class="format-badge image">JPG</span>
+                            <span class="format-badge text">TXT</span>
+                        </div>
+                        <button class="btn-upload"><i class="ph ph-plus"></i> Choose File</button>
+                    </div>
+                    <div class="file-preview" id="compress-preview" style="display:none;">
+                        <div class="file-preview-card">
+                            <div class="file-preview-thumb" id="compress-thumb"></div>
+                            <div class="file-preview-info">
+                                <div class="file-preview-name" id="compress-file-name"></div>
+                                <div class="file-preview-meta">
+                                    <span class="file-preview-size" id="compress-file-size"></span>
+                                    <span class="file-preview-type" id="compress-file-type"></span>
+                                </div>
+                            </div>
+                            <div class="file-preview-actions">
+                                <button class="btn-change-file" id="compress-change-file"><i class="ph ph-pencil-simple"></i> Change</button>
+                                <button class="btn-remove-file" id="compress-remove-file"><i class="ph ph-x"></i></button>
+                            </div>
+                        </div>
+                        <div class="upload-error" id="compress-upload-error" style="display:none;">
+                            <i class="ph ph-warning"></i>
+                            <span></span>
+                        </div>
+                        <div class="action-buttons">
+                            <button class="btn-process" id="compress-process-btn"><i class="ph ph-gear"></i> Compress</button>
+                        </div>
+                    </div>
+                    <input type="file" id="compress-file-input" hidden>
+                </div>
+            </div>
+
+            <div class="page-content" id="page-convert">
+                <div class="page-header">
+                    <button class="btn-back" onclick="switchPage('home')"><i class="ph ph-arrow-left"></i></button>
+                    <div class="page-header-content"><h1>Convert Files</h1><p>Transform any file to your desired format</p></div>
+                </div>
+                <div class="supported-formats">
+                    <span class="sf-label">Supported formats:</span>
+                    <span class="format-badge badge-pdf">PDF</span>
+                    <span class="format-badge badge-doc">DOC</span>
+                    <span class="format-badge badge-xls">XLS</span>
+                    <span class="format-badge badge-ppt">PPT</span>
+                    <span class="format-badge badge-png">PNG</span>
+                    <span class="format-badge badge-jpg">JPG</span>
+                    <span class="format-badge badge-txt">TXT</span>
+                </div>
+                <div class="source-detected" id="source-detected" style="display:none;">
+                    <i class="ph ph-check-circle"></i><span>Detected:</span><span class="format-badge" id="source-badge"></span>
+                    <span class="source-arrow"><i class="ph ph-arrow-right"></i></span>
+                </div>
+                <div class="section-sublabel">Convert to</div>
+                <div class="format-grid" id="convert-target">
+                    <div class="format-card active" data-convert-target="word">
+                        <div class="format-icon" style="background: linear-gradient(135deg, #2b579a, #1e40af);"><i class="ph ph-file-doc"></i></div>
+                        <span>Word</span>
+                    </div>
+                    <div class="format-card" data-convert-target="excel">
+                        <div class="format-icon" style="background: linear-gradient(135deg, #217346, #16a34a);"><i class="ph ph-file-xls"></i></div>
+                        <span>Excel</span>
+                    </div>
+                    <div class="format-card" data-convert-target="ppt">
+                        <div class="format-icon" style="background: linear-gradient(135deg, #d24726, #ea580c);"><i class="ph ph-file-ppt"></i></div>
+                        <span>PowerPoint</span>
+                    </div>
+                    <div class="format-card" data-convert-target="image">
+                        <div class="format-icon" style="background: linear-gradient(135deg, #f59e0b, #d97706);"><i class="ph ph-image"></i></div>
+                        <span>Image</span>
+                    </div>
+                    <div class="format-card" data-convert-target="text">
+                        <div class="format-icon" style="background: linear-gradient(135deg, #64748b, #475569);"><i class="ph ph-text-t"></i></div>
+                        <span>Text</span>
+                    </div>
+                    <div class="format-card" data-convert-target="pdf">
+                        <div class="format-icon" style="background: linear-gradient(135deg, #ef4444, #dc2626);"><i class="ph ph-file-pdf"></i></div>
+                        <span>PDF</span>
+                    </div>
+                </div>
+                <div class="upload-zone" id="convert-upload">
+                    <div class="upload-zone-content">
+                        <div class="upload-zone-icon"><i class="ph ph-upload-simple"></i></div>
+                        <h3>Add PDF, image, Word, Excel, and PowerPoint files</h3>
+                        <p>Drop your file here or click to browse</p>
+                        <button class="btn-upload" id="convert-select-btn"><i class="ph ph-plus"></i> Choose File</button>
+                    </div>
+                    <input type="file" id="convert-file-input" hidden>
+                </div>
+            </div>
+
+            <div class="page-content" id="page-organize">
+                <div class="page-header">
+                    <button class="btn-back" onclick="switchPage('home')"><i class="ph ph-arrow-left"></i></button>
+                    <div class="page-header-content"><h1>Merge PDFs</h1><p>Combine multiple PDF files into one</p></div>
+                </div>
+
+                <!-- Initial Upload State -->
+                <div class="upload-zone" id="organize-upload">
+                    <div class="upload-zone-content">
+                        <div class="upload-zone-icon"><i class="ph ph-upload-simple"></i></div>
+                        <h3>Drop your PDF files here</h3>
+                        <p>Select multiple PDF files to merge into one</p>
+                        <button class="btn-upload"><i class="ph ph-plus"></i> Choose PDF Files</button>
+                    </div>
+                    <input type="file" accept=".pdf" multiple id="organize-file-input" hidden>
+                </div>
+
+                <!-- Horizontal Merge View (Hidden initially) -->
+                <div class="merge-view" id="merge-view" style="display:none;">
+                    <div class="merge-toolbar">
+                        <div class="merge-toolbar-left">
+                            <span class="merge-file-count" id="merge-file-count">0 files</span>
+                        </div>
+                        <div class="merge-toolbar-right">
+                            <button class="btn-secondary" id="merge-add-more-btn"><i class="ph ph-plus"></i> Add Files</button>
+                            <button class="btn-process" id="merge-process-btn"><i class="ph ph-check"></i> Merge & Download</button>
+                        </div>
+                    </div>
+                    <div class="merge-files-container" id="merge-files-container">
+                        <!-- Items injected here -->
+                    </div>
+                </div>
+            </div>
+
+            <div class="page-content" id="page-edit">
+                <div class="page-header">
+                    <button class="btn-back" onclick="switchPage('home')"><i class="ph ph-arrow-left"></i></button>
+                    <div class="page-header-content"><h1>Edit PDF</h1><p>Add text, images, shapes, and annotations</p></div>
+                </div>
+                <div class="edit-toolbar" id="edit-toolbar" style="display:none;">
+                    <div class="edit-tools-group">
+                        <button class="edit-tool-btn active" data-tool="text" title="Add Text">
+                            <i class="ph ph-text-t"></i>
+                        </button>
+                        <button class="edit-tool-btn" data-tool="watermark" title="Add Watermark">
+                            <i class="ph ph-drop"></i>
+                        </button>
+                        <button class="edit-tool-btn" data-tool="draw" title="Draw">
+                            <i class="ph ph-pencil-simple"></i>
+                        </button>
+                        <div class="edit-divider"></div>
+                        <button class="edit-tool-btn" data-tool="undo" title="Undo">
+                            <i class="ph ph-arrow-u-up-left"></i>
+                        </button>
+                        <button class="edit-tool-btn" data-tool="redo" title="Redo">
+                            <i class="ph ph-arrow-u-up-right"></i>
+                        </button>
+                    </div>
+                    <button class="btn-edit-save" id="edit-save-btn"><i class="ph ph-floppy-disk"></i> Save PDF</button>
+                </div>
+                <div class="upload-zone" id="edit-upload">
+                    <div class="upload-zone-content">
+                        <div class="upload-zone-icon"><i class="ph ph-upload-simple"></i></div>
+                        <h3>Drop your PDF here</h3>
+                        <p>Open PDF to start editing</p>
+                        <button class="btn-upload"><i class="ph ph-plus"></i> Choose PDF File</button>
+                    </div>
+                    <div class="file-preview" id="edit-preview" style="display:none;">
+                        <div class="file-list" id="edit-file-list"></div>
+                        <div class="edit-canvas-wrapper" id="edit-canvas-wrapper" style="display:none; margin-top: 20px;">
+                            <div class="pdf-page-container" id="pdf-page-container">
+                                <canvas id="pdf-edit-canvas"></canvas>
+                                <div id="edit-overlays-container"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <input type="file" accept=".pdf" id="edit-file-input" hidden>
+                </div>
+            </div>
+
+            <div class="page-content" id="page-sign">
+                <div class="page-header">
+                    <button class="btn-back" onclick="switchPage('home')"><i class="ph ph-arrow-left"></i></button>
+                    <div class="page-header-content"><h1>E-Sign PDF</h1><p>Add electronic signatures to your documents</p></div>
+                </div>
+                <div class="upload-zone" id="sign-upload">
+                    <div class="upload-zone-content">
+                        <div class="upload-zone-icon"><i class="ph ph-upload-simple"></i></div>
+                        <h3>Drop your PDF here</h3>
+                        <p>Sign documents securely</p>
+                        <button class="btn-upload"><i class="ph ph-plus"></i> Choose PDF File</button>
+                    </div>
+                    <div class="file-preview" id="sign-preview" style="display:none;">
+                        <div class="file-list" id="sign-file-list"></div>
+                        <div class="sign-pad" id="sign-pad" style="display:none; margin-top: 20px; background: var(--bg-glass); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 20px;">
+                            <div class="section-sublabel">Draw Your Signature</div>
+                            <canvas id="sign-canvas" style="width: 100%; height: 150px; background: white; border-radius: var(--radius-sm); cursor: crosshair;"></canvas>
+                            <div class="action-buttons" style="margin-top: 12px;">
+                                <button class="btn-secondary" onclick="clearSignature()"><i class="ph ph-trash"></i> Clear</button>
+                                <button class="btn-process" onclick="placeSignature()"><i class="ph ph-check"></i> Apply Signature</button>
+                            </div>
+                        </div>
+                        <div class="action-buttons">
+                            <button class="btn-process" id="sign-save-btn"><i class="ph ph-floppy-disk"></i> Save Signed PDF</button>
+                        </div>
+                    </div>
+                    <input type="file" accept=".pdf" id="sign-file-input" hidden>
+                </div>
+            </div>
+
+            <div class="page-content" id="page-ai-chat">
+                <div class="page-header">
+                    <button class="btn-back" onclick="switchPage('home')"><i class="ph ph-arrow-left"></i></button>
+                    <div class="page-header-content"><h1>AI PDF Chat</h1><p>Chat with your PDF using AI</p></div>
+                </div>
+                <div class="upload-zone" id="ai-upload">
+                    <div class="upload-zone-content">
+                        <div class="upload-zone-icon ai-icon"><i class="ph ph-robot"></i></div>
+                        <h3>Upload PDF to chat</h3>
+                        <p>Ask questions about your document content</p>
+                        <div class="accepted-formats">
+                            <span class="format-badge pdf">PDF</span>
+                        </div>
+                        <button class="btn-upload"><i class="ph ph-plus"></i> Choose PDF File</button>
+                    </div>
+                    <div class="file-preview" id="ai-file-preview" style="display:none;">
+                        <div class="file-preview-card">
+                            <div class="file-preview-thumb" id="ai-thumb"></div>
+                            <div class="file-preview-info">
+                                <div class="file-preview-name" id="ai-file-name"></div>
+                                <div class="file-preview-meta">
+                                    <span class="file-preview-size" id="ai-file-size"></span>
+                                    <span class="file-preview-pages" id="ai-file-pages"></span>
+                                </div>
+                            </div>
+                            <div class="file-preview-actions">
+                                <button class="btn-change-file" id="ai-change-file"><i class="ph ph-pencil-simple"></i> Change</button>
+                                <button class="btn-remove-file" id="ai-remove-file"><i class="ph ph-x"></i></button>
+                            </div>
+                        </div>
+                        <div class="upload-error" id="ai-upload-error" style="display:none;">
+                            <i class="ph ph-warning"></i>
+                            <span></span>
+                        </div>
+                    </div>
+                    <input type="file" accept=".pdf" id="ai-file-input" hidden>
+                </div>
+            </div>
+
+            <div class="page-content" id="page-ai-summarize">
+                <div class="page-header">
+                    <button class="btn-back" onclick="switchPage('home')"><i class="ph ph-arrow-left"></i></button>
+                    <div class="page-header-content"><h1>AI Summarize</h1><p>Get instant summaries of your documents</p></div>
+                </div>
+                <div class="upload-zone" id="summarize-upload">
+                    <div class="upload-zone-content">
+                        <div class="upload-zone-icon ai-icon"><i class="ph ph-magic-wand"></i></div>
+                        <h3>Upload PDF to summarize</h3>
+                        <p>Get key points and highlights instantly</p>
+                        <div class="accepted-formats">
+                            <span class="format-badge pdf">PDF</span>
+                        </div>
+                        <button class="btn-upload"><i class="ph ph-plus"></i> Choose PDF File</button>
+                    </div>
+                    <div class="file-preview" id="summarize-file-preview" style="display:none;">
+                        <div class="file-preview-card">
+                            <div class="file-preview-thumb" id="summarize-thumb"></div>
+                            <div class="file-preview-info">
+                                <div class="file-preview-name" id="summarize-file-name"></div>
+                                <div class="file-preview-meta">
+                                    <span class="file-preview-size" id="summarize-file-size"></span>
+                                    <span class="file-preview-pages" id="summarize-file-pages"></span>
+                                </div>
+                            </div>
+                            <div class="file-preview-actions">
+                                <button class="btn-change-file" id="summarize-change-file"><i class="ph ph-pencil-simple"></i> Change</button>
+                                <button class="btn-remove-file" id="summarize-remove-file"><i class="ph ph-x"></i></button>
+                            </div>
+                        </div>
+                        <div class="upload-error" id="summarize-upload-error" style="display:none;">
+                            <i class="ph ph-warning"></i>
+                            <span></span>
+                        </div>
+                    </div>
+                    <input type="file" accept=".pdf" id="summarize-file-input" hidden>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div class="modal" id="processing-modal">
+        <div class="modal-content glass">
+            <div class="processing-animation"><div class="loader"></div></div>
+            <h3 id="processing-title">Processing...</h3>
+            <p id="processing-text">Please wait</p>
+            <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+        </div>
+    </div>
+
+    <div class="modal" id="success-modal">
+        <div class="modal-content glass">
+            <div class="success-animation"><i class="ph ph-check-circle"></i></div>
+            <h3>Complete!</h3>
+            <p id="success-text">Your file is ready</p>
+            <div class="modal-actions">
+                <button class="btn-download" id="btn-download"><i class="ph ph-download-simple"></i> Download</button>
+                <button class="btn-secondary" onclick="closeModals()">Done</button>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="lib/pdf-lib.min.js"></script>
+    <script src="lib/pdf.min.js"></script>
+    <script src="lib/jszip.min.js"></script>
+    <script src="lib/xlsx.full.min.js"></script>
+    <script src="lib/docx.umd.js"></script>
+    <script src="lib/pptxgen.bundle.js"></script>
+    <script src="lib/mammoth.browser.min.js"></script>
+    <script src="lib/html2pdf.bundle.min.js"></script>
+    <script>
+        try { if (window['pdfjsLib']) { window['pdfjsLib'].GlobalWorkerOptions.workerSrc = 'lib/pdf.worker.min.js'; } } catch (e) { console.warn('pdf.js worker init failed:', e); }
+    </script>
+    <script src="app.js?v=30"></script>
+</body>
+</html>

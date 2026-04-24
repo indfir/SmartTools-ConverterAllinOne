@@ -1,0 +1,54 @@
+# Node modules
+node_modules/
+
+# Build outputs
+dist/
+build/
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs
+*.log
+npm-debug.log*
+
+# Environment
+.env
+
+# Executables and large files
+*.exe
+*.dll
+*.bin
+*.ico
+*.pak
+resources.pak
+v8_context_snapshot.bin
+icudtl.dat
+vk_swiftshader.dll
+vk_swiftshader_icd.json
+vulkan-1.dll
+libEGL.dll
+libGLESv2.dll
+d3dcompiler_47.dll
+ffmpeg.dll
+nw_elf.dll
+nw.dll
+nw_200_percent.pak
+nw_100_percent.pak
+notification_helper.exe
+
+# Large built files
+SmartTools.exe
+locales/
+swiftshader/
+
+# Backup files
+*.bak

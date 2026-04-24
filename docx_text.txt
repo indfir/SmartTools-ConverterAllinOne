@@ -1,0 +1,88 @@
+INDRA FIRDAUS
+
+Jakarta Selatan, DKI Jakarta • +62811314442 • indra.rigel@gmail.com • LinkedIn : Indra Firdaus
+
+Business Intelligence Data Analyst with 10+ years of experience in data analytics, reporting, and network optimization. Currently managing end-to-end data operations at Youtap Indonesia (OttoDigital Group), covering data pipeline management, reconciliation operations, BI dashboard development, and cross-functional analytics support. Experienced in building automation solutions to improve operational efficiency and delivering data-driven insights to stakeholders across multiple departments.
+
+SKILLS
+
+Data & Analytics:  SQL, Google BigQuery, Python, Data Analysis, Data Reconciliation, ETL Processes
+
+BI & Visualization:  Tableau, Metabase, Looker Studio, Microsoft Excel
+
+Data Engineering:  Apache Airflow, Google Cloud Storage (GCS), Pipeline Automation, Google Apps Script
+
+Tools & Platforms:  Google Cloud Platform, Jira, Confluence, Git, Telegram Bot API
+
+PROFESSIONAL EXPERIENCE
+
+Youtap Indonesia – PT. Mitra Digital Sukses	Nov 2022 – Present
+
+Business Intelligence (Data Analyst)
+
+Manage daily data reconciliation operations across multiple payment issuers and banks, ensuring transaction data accuracy between internal systems and external partners.
+
+Maintain and monitor data pipelines using Apache Airflow, managing data flows from Google Cloud Storage to BigQuery and troubleshooting job failures and connectivity issues.
+
+Build, maintain, and update interactive dashboards and business performance reports using Tableau, Metabase, and Looker Studio for operations, finance, and management teams.
+
+Fulfill ad-hoc data requests and provide analytical support to cross-functional teams including Operations, Finance, Business & Partner, Product, and Compliance.
+
+Develop automation solutions using Python to streamline manual processes such as data formatting, reconciliation matching, and settlement reporting.
+
+Collaborate with stakeholders across departments to translate business requirements into data deliverables, including compliance reporting for government agencies.
+
+Manage data infrastructure optimization including BigQuery cost analysis and SSL certificate maintenance for BI platforms.
+
+
+
+PT Picotel Nusantara, DKI Jakarta – Telkomsel Local Optim Project	2020 – Oct 2022
+
+Data Analyst – Network Performance
+
+Built and maintained KPI monitoring dashboards to track network performance trends across multiple regions, enabling proactive issue identification. 
+
+Developed weekly data-driven reports and visualizations using Tableau, presenting actionable insights to stakeholders and management. 
+
+Analyzed large-scale customer feedback datasets to identify recurring patterns, driving service quality improvements and measurable gains in customer satisfaction. 
+
+Coordinated with cross-functional teams to investigate data anomalies, perform root cause analysis, and escalate findings for timely resolution.
+
+PT GMI Network, DKI Jakarta – Telkomsel Local Optim Project	2015 – 2020
+
+Data Analyst – Network Performance
+
+Performed in-depth data analysis on large-volume 4G/3G operational datasets to identify performance bottlenecks and recommend efficiency improvements.
+
+Conducted root cause analysis using structured data methodologies to diagnose and resolve complex technical issues across hardware, transport, and signal layers.
+
+Translated analytical findings into data-driven recommendations that led to validated improvements in network coverage and service quality.
+
+Designed and maintained KPI dashboards and monitoring reports tracking accessibility, retainability, and service integrity metrics.
+
+Automated recurring report generation from OSS data sources, streamlining weekly performance reporting workflows and reducing manual effort.
+
+PT Lexcorp Indonesia – XL Project	2012 – 2015
+
+Data Analyst – Network Performance
+
+Monitored and analyzed KPI datasets across 2G/3G networks, identifying underperforming areas and recommending targeted optimization strategies.
+
+Built analytical frameworks for alarm and performance data, enabling faster diagnosis of network parameter issues.
+
+Developed data-driven solutions for neighbor cell optimization and congestion management, improving overall network efficiency.
+
+Conducted periodic data audits and delivered performance improvement reports to support capacity planning and configuration decisions.
+
+
+
+EDUCATION
+
+National Institute of Science and Technology, Jakarta	2014 – 2018
+
+Bachelor’s degree, Telecommunication Engineering, (GPA: 3.43)
+
+Jakarta State Polytechnic	2009 – 2012
+
+Diploma, Telecommunication Engineering, (GPA: 3.43)
+
