@@ -8,10 +8,10 @@
     "icon": "icon.png",
     "width": 1400,
     "height": 900,
-    "min_width": 1000,
-    "min_height": 700,
+    "min_width": 760,
+    "min_height": 560,
     "position": "center",
-    "frame": true,
+    "frame": false,
     "show": true,
     "resizable": true
   },
