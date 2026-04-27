@@ -3080,34 +3080,7 @@ window.openGenericTool = function(toolId) {
         },
         'unit-converter': {
             t: 'Unit Converter', d: 'Convert between different units of measurement',
-            type: 'unit',
-            controls: [
-                { type: 'select', id: 'unit-category', label: 'Category', options: [
-                    { value: 'length', text: 'Length' },
-                    { value: 'weight', text: 'Weight' },
-                    { value: 'temperature', text: 'Temperature' },
-                    { value: 'volume', text: 'Volume' }
-                ]},
-                { type: 'select', id: 'unit-from', label: 'From', options: [
-                    { value: 'm', text: 'Meter (m)' },
-                    { value: 'km', text: 'Kilometer (km)' },
-                    { value: 'cm', text: 'Centimeter (cm)' },
-                    { value: 'mm', text: 'Millimeter (mm)' },
-                    { value: 'ft', text: 'Foot (ft)' },
-                    { value: 'in', text: 'Inch (in)' },
-                    { value: 'mi', text: 'Mile (mi)' }
-                ]},
-                { type: 'select', id: 'unit-to', label: 'To', options: [
-                    { value: 'ft', text: 'Foot (ft)' },
-                    { value: 'm', text: 'Meter (m)' },
-                    { value: 'km', text: 'Kilometer (km)' },
-                    { value: 'cm', text: 'Centimeter (cm)' },
-                    { value: 'mm', text: 'Millimeter (mm)' },
-                    { value: 'in', text: 'Inch (in)' },
-                    { value: 'mi', text: 'Mile (mi)' }
-                ]},
-                { type: 'number', id: 'unit-value', label: 'Value', value: '1', placeholder: 'Enter value' }
-            ]
+            type: 'unit-converter-full'
         },
         'percentage-calc': {
             t: 'Percentage Calculator', d: 'Calculate percentages quickly',
@@ -3437,6 +3410,77 @@ window.openGenericTool = function(toolId) {
         html += '</div>'; // End 3panel layout
     }
     
+    // Unit Converter Full
+    if (config.type === 'unit-converter-full') {
+        html += '<div class="unit-converter-full">';
+        
+        // Express Version Tabs
+        html += '<div class="uc-express-tabs">';
+        html += '<button class="uc-express-tab active" data-cat="length"><i class="ph ph-ruler"></i> Length</button>';
+        html += '<button class="uc-express-tab" data-cat="temperature"><i class="ph ph-thermometer"></i> Temperature</button>';
+        html += '<button class="uc-express-tab" data-cat="area"><i class="ph ph-square"></i> Area</button>';
+        html += '<button class="uc-express-tab" data-cat="volume"><i class="ph ph-drop"></i> Volume</button>';
+        html += '<button class="uc-express-tab" data-cat="weight"><i class="ph ph-scales"></i> Weight</button>';
+        html += '<button class="uc-express-tab" data-cat="time"><i class="ph ph-clock"></i> Time</button>';
+        html += '</div>';
+        
+        // Express Converter
+        html += '<div class="uc-express-converter">';
+        html += '<div class="uc-input-group">';
+        html += '<label class="uc-label">From:</label>';
+        html += '<div class="uc-input-row">';
+        html += '<input type="number" class="uc-input uc-from-value" id="uc-from-value" value="1" />';
+        html += '<select class="uc-select uc-from-unit" id="uc-from-unit"></select>';
+        html += '</div>';
+        html += '</div>';
+        
+        html += '<div class="uc-swap-btn" id="uc-swap-btn"><i class="ph ph-arrows-left-right"></i></div>';
+        
+        html += '<div class="uc-input-group">';
+        html += '<label class="uc-label">To:</label>';
+        html += '<div class="uc-input-row">';
+        html += '<input type="number" class="uc-input uc-to-value" id="uc-to-value" readonly />';
+        html += '<select class="uc-select uc-to-unit" id="uc-to-unit"></select>';
+        html += '</div>';
+        html += '</div>';
+        html += '</div>';
+        
+        // Find Units Section
+        html += '<div class="uc-find-section">';
+        html += '<h3 class="uc-section-title"><i class="ph ph-magnifying-glass"></i> Find the Units to Convert</h3>';
+        html += '<div class="uc-find-row">';
+        html += '<div class="uc-find-input-group">';
+        html += '<label class="uc-label">From Unit:</label>';
+        html += '<input type="text" class="uc-find-input" id="uc-find-from" placeholder="e.g. kilogram" />';
+        html += '</div>';
+        html += '<div class="uc-find-input-group">';
+        html += '<label class="uc-label">To Unit:</label>';
+        html += '<input type="text" class="uc-find-input" id="uc-find-to" placeholder="e.g. lbs" />';
+        html += '</div>';
+        html += '<button class="uc-find-btn" id="uc-find-btn"><i class="ph ph-arrow-right"></i> Convert</button>';
+        html += '</div>';
+        html += '<div class="uc-find-result" id="uc-find-result" style="display:none;"></div>';
+        html += '</div>';
+        
+        // Common Conversions
+        html += '<div class="uc-common-section">';
+        html += '<h3 class="uc-section-title"><i class="ph ph-lightning"></i> Common Conversions</h3>';
+        html += '<div class="uc-common-grid" id="uc-common-grid">';
+        // Will be populated by JS
+        html += '</div>';
+        html += '</div>';
+        
+        // Full Converter List
+        html += '<div class="uc-full-list">';
+        html += '<h3 class="uc-section-title"><i class="ph ph-list-dashes"></i> Unit Converters — Full Versions</h3>';
+        html += '<div class="uc-full-list-container" id="uc-full-list-container">';
+        // Will be populated by JS
+        html += '</div>';
+        html += '</div>';
+        
+        html += '</div>'; // End unit-converter-full
+    }
+    
     // Note
     if (config.note) {
         html += '<div class="gt-note"><i class="ph ph-info"></i> ' + config.note + '</div>';
@@ -3488,6 +3532,12 @@ window.openGenericTool = function(toolId) {
     
     // Scientific calculator: hide process button and output (calculates live)
     if (config.type === 'scientific-calc') {
+        if (processBtn) processBtn.style.display = 'none';
+        if (output) output.style.display = 'none';
+    }
+    
+    // Unit converter full: hide process button and output (converts live)
+    if (config.type === 'unit-converter-full') {
         if (processBtn) processBtn.style.display = 'none';
         if (output) output.style.display = 'none';
     }
@@ -4000,6 +4050,531 @@ window.openGenericTool = function(toolId) {
         var future = new Date();
         future.setDate(future.getDate() + 30);
         dateTo.value = future.toISOString().split('T')[0];
+    }
+    
+    // Unit Converter Full Logic
+    if (config.type === 'unit-converter-full') {
+        // Comprehensive unit data
+        var unitData = {
+            length: {
+                base: 'm',
+                units: {
+                    m: { name: 'Meter', symbol: 'm', factor: 1 },
+                    km: { name: 'Kilometer', symbol: 'km', factor: 1000 },
+                    cm: { name: 'Centimeter', symbol: 'cm', factor: 0.01 },
+                    mm: { name: 'Millimeter', symbol: 'mm', factor: 0.001 },
+                    'μm': { name: 'Micrometer', symbol: 'μm', factor: 1e-6 },
+                    nm: { name: 'Nanometer', symbol: 'nm', factor: 1e-9 },
+                    mi: { name: 'Mile', symbol: 'mi', factor: 1609.344 },
+                    yd: { name: 'Yard', symbol: 'yd', factor: 0.9144 },
+                    ft: { name: 'Foot', symbol: 'ft', factor: 0.3048 },
+                    in: { name: 'Inch', symbol: 'in', factor: 0.0254 },
+                    ly: { name: 'Light Year', symbol: 'ly', factor: 9.461e15 },
+                    nmi: { name: 'Nautical Mile', symbol: 'nmi', factor: 1852 }
+                }
+            },
+            temperature: {
+                type: 'temperature',
+                units: {
+                    C: { name: 'Celsius', symbol: '°C' },
+                    F: { name: 'Fahrenheit', symbol: '°F' },
+                    K: { name: 'Kelvin', symbol: 'K' },
+                    R: { name: 'Rankine', symbol: '°R' }
+                }
+            },
+            area: {
+                base: 'm2',
+                units: {
+                    m2: { name: 'Square Meter', symbol: 'm²', factor: 1 },
+                    km2: { name: 'Square Kilometer', symbol: 'km²', factor: 1e6 },
+                    cm2: { name: 'Square Centimeter', symbol: 'cm²', factor: 1e-4 },
+                    mm2: { name: 'Square Millimeter', symbol: 'mm²', factor: 1e-6 },
+                    ha: { name: 'Hectare', symbol: 'ha', factor: 1e4 },
+                    acre: { name: 'Acre', symbol: 'acre', factor: 4046.86 },
+                    mi2: { name: 'Square Mile', symbol: 'mi²', factor: 2.59e6 },
+                    yd2: { name: 'Square Yard', symbol: 'yd²', factor: 0.836127 },
+                    ft2: { name: 'Square Foot', symbol: 'ft²', factor: 0.092903 },
+                    in2: { name: 'Square Inch', symbol: 'in²', factor: 6.4516e-4 }
+                }
+            },
+            volume: {
+                base: 'l',
+                units: {
+                    l: { name: 'Liter', symbol: 'L', factor: 1 },
+                    ml: { name: 'Milliliter', symbol: 'mL', factor: 0.001 },
+                    m3: { name: 'Cubic Meter', symbol: 'm³', factor: 1000 },
+                    cm3: { name: 'Cubic Centimeter', symbol: 'cm³', factor: 0.001 },
+                    gal: { name: 'Gallon (US)', symbol: 'gal', factor: 3.78541 },
+                    qt: { name: 'Quart (US)', symbol: 'qt', factor: 0.946353 },
+                    pt: { name: 'Pint (US)', symbol: 'pt', factor: 0.473176 },
+                    cup: { name: 'Cup (US)', symbol: 'cup', factor: 0.236588 },
+                    floz: { name: 'Fluid Ounce (US)', symbol: 'fl oz', factor: 0.0295735 },
+                    tbsp: { name: 'Tablespoon', symbol: 'tbsp', factor: 0.0147868 },
+                    tsp: { name: 'Teaspoon', symbol: 'tsp', factor: 0.00492892 },
+                    ft3: { name: 'Cubic Foot', symbol: 'ft³', factor: 28.3168 },
+                    in3: { name: 'Cubic Inch', symbol: 'in³', factor: 0.0163871 }
+                }
+            },
+            weight: {
+                base: 'kg',
+                units: {
+                    kg: { name: 'Kilogram', symbol: 'kg', factor: 1 },
+                    g: { name: 'Gram', symbol: 'g', factor: 0.001 },
+                    mg: { name: 'Milligram', symbol: 'mg', factor: 1e-6 },
+                    'μg': { name: 'Microgram', symbol: 'μg', factor: 1e-9 },
+                    ton: { name: 'Metric Ton', symbol: 't', factor: 1000 },
+                    lb: { name: 'Pound', symbol: 'lb', factor: 0.453592 },
+                    oz: { name: 'Ounce', symbol: 'oz', factor: 0.0283495 },
+                    st: { name: 'Stone', symbol: 'st', factor: 6.35029 },
+                    ct: { name: 'Carat', symbol: 'ct', factor: 0.0002 }
+                }
+            },
+            time: {
+                base: 's',
+                units: {
+                    s: { name: 'Second', symbol: 's', factor: 1 },
+                    ms: { name: 'Millisecond', symbol: 'ms', factor: 0.001 },
+                    'μs': { name: 'Microsecond', symbol: 'μs', factor: 1e-6 },
+                    ns: { name: 'Nanosecond', symbol: 'ns', factor: 1e-9 },
+                    min: { name: 'Minute', symbol: 'min', factor: 60 },
+                    h: { name: 'Hour', symbol: 'h', factor: 3600 },
+                    day: { name: 'Day', symbol: 'day', factor: 86400 },
+                    week: { name: 'Week', symbol: 'wk', factor: 604800 },
+                    month: { name: 'Month (avg)', symbol: 'mo', factor: 2.628e6 },
+                    year: { name: 'Year', symbol: 'yr', factor: 3.154e7 }
+                }
+            },
+            speed: {
+                base: 'mps',
+                units: {
+                    mps: { name: 'Meter/Second', symbol: 'm/s', factor: 1 },
+                    kph: { name: 'Kilometer/Hour', symbol: 'km/h', factor: 0.277778 },
+                    mph: { name: 'Mile/Hour', symbol: 'mph', factor: 0.44704 },
+                    knot: { name: 'Knot', symbol: 'kn', factor: 0.514444 },
+                    fps: { name: 'Foot/Second', symbol: 'ft/s', factor: 0.3048 },
+                    mach: { name: 'Mach', symbol: 'Ma', factor: 343 }
+                }
+            },
+            pressure: {
+                base: 'pa',
+                units: {
+                    pa: { name: 'Pascal', symbol: 'Pa', factor: 1 },
+                    kpa: { name: 'Kilopascal', symbol: 'kPa', factor: 1000 },
+                    bar: { name: 'Bar', symbol: 'bar', factor: 1e5 },
+                    psi: { name: 'PSI', symbol: 'psi', factor: 6894.76 },
+                    atm: { name: 'Atmosphere', symbol: 'atm', factor: 101325 },
+                    torr: { name: 'Torr', symbol: 'Torr', factor: 133.322 }
+                }
+            },
+            energy: {
+                base: 'j',
+                units: {
+                    j: { name: 'Joule', symbol: 'J', factor: 1 },
+                    kj: { name: 'Kilojoule', symbol: 'kJ', factor: 1000 },
+                    cal: { name: 'Calorie', symbol: 'cal', factor: 4.184 },
+                    kcal: { name: 'Kilocalorie', symbol: 'kcal', factor: 4184 },
+                    wh: { name: 'Watt-Hour', symbol: 'Wh', factor: 3600 },
+                    kwh: { name: 'Kilowatt-Hour', symbol: 'kWh', factor: 3.6e6 },
+                    ev: { name: 'Electronvolt', symbol: 'eV', factor: 1.602e-19 },
+                    btu: { name: 'BTU', symbol: 'BTU', factor: 1055.06 }
+                }
+            },
+            power: {
+                base: 'w',
+                units: {
+                    w: { name: 'Watt', symbol: 'W', factor: 1 },
+                    kw: { name: 'Kilowatt', symbol: 'kW', factor: 1000 },
+                    mw: { name: 'Megawatt', symbol: 'MW', factor: 1e6 },
+                    hp: { name: 'Horsepower', symbol: 'hp', factor: 745.7 },
+                    btuh: { name: 'BTU/Hour', symbol: 'BTU/h', factor: 0.293071 }
+                }
+            },
+            force: {
+                base: 'n',
+                units: {
+                    n: { name: 'Newton', symbol: 'N', factor: 1 },
+                    kn: { name: 'Kilonewton', symbol: 'kN', factor: 1000 },
+                    lbf: { name: 'Pound-Force', symbol: 'lbf', factor: 4.44822 },
+                    kgf: { name: 'Kilogram-Force', symbol: 'kgf', factor: 9.80665 },
+                    dyne: { name: 'Dyne', symbol: 'dyn', factor: 1e-5 }
+                }
+            },
+            angle: {
+                base: 'deg',
+                units: {
+                    deg: { name: 'Degree', symbol: '°', factor: 1 },
+                    rad: { name: 'Radian', symbol: 'rad', factor: 57.2958 },
+                    grad: { name: 'Gradian', symbol: 'grad', factor: 0.9 },
+                    arcmin: { name: 'Arcminute', symbol: "'", factor: 1/60 },
+                    arcsec: { name: 'Arcsecond', symbol: '"', factor: 1/3600 },
+                    rev: { name: 'Revolution', symbol: 'rev', factor: 360 }
+                }
+            },
+            data: {
+                base: 'b',
+                units: {
+                    b: { name: 'Bit', symbol: 'b', factor: 1 },
+                    B: { name: 'Byte', symbol: 'B', factor: 8 },
+                    KB: { name: 'Kilobyte', symbol: 'KB', factor: 8192 },
+                    MB: { name: 'Megabyte', symbol: 'MB', factor: 8.389e6 },
+                    GB: { name: 'Gigabyte', symbol: 'GB', factor: 8.59e9 },
+                    TB: { name: 'Terabyte', symbol: 'TB', factor: 8.796e12 },
+                    Kib: { name: 'Kibibit', symbol: 'Kib', factor: 1024 },
+                    Mib: { name: 'Mebibit', symbol: 'Mib', factor: 1.049e6 },
+                    Gib: { name: 'Gibibit', symbol: 'Gib', factor: 1.074e9 }
+                }
+            },
+            frequency: {
+                base: 'hz',
+                units: {
+                    hz: { name: 'Hertz', symbol: 'Hz', factor: 1 },
+                    khz: { name: 'Kilohertz', symbol: 'kHz', factor: 1000 },
+                    mhz: { name: 'Megahertz', symbol: 'MHz', factor: 1e6 },
+                    ghz: { name: 'Gigahertz', symbol: 'GHz', factor: 1e9 },
+                    rpm: { name: 'RPM', symbol: 'rpm', factor: 1/60 }
+                }
+            }
+        };
+        
+        // Common conversions
+        var commonConversions = [
+            { from: 'cm', to: 'in', cat: 'length', label: 'cm to inches' },
+            { from: 'kg', to: 'lb', cat: 'weight', label: 'kg to lbs' },
+            { from: 'C', to: 'F', cat: 'temperature', label: 'Celsius to Fahrenheit' },
+            { from: 'mm', to: 'in', cat: 'length', label: 'mm to inches' },
+            { from: 'm', to: 'ft', cat: 'length', label: 'meters to feet' },
+            { from: 'km', to: 'mi', cat: 'length', label: 'km to miles' },
+            { from: 'cm', to: 'ft', cat: 'length', label: 'cm to feet' },
+            { from: 'g', to: 'oz', cat: 'weight', label: 'grams to ounces' },
+            { from: 'in', to: 'ft', cat: 'length', label: 'inches to feet' },
+            { from: 'l', to: 'gal', cat: 'volume', label: 'liters to gallons' },
+            { from: 'lb', to: 'oz', cat: 'weight', label: 'pounds to ounces' },
+            { from: 'mph', to: 'kph', cat: 'speed', label: 'mph to kph' },
+            { from: 'acre', to: 'ft2', cat: 'area', label: 'acres to sq feet' },
+            { from: 'rad', to: 'deg', cat: 'angle', label: 'radians to degrees' },
+            { from: 'hp', to: 'kw', cat: 'power', label: 'hp to kw' },
+            { from: 'm', to: 'yd', cat: 'length', label: 'meters to yards' },
+            { from: 'ml', to: 'cup', cat: 'volume', label: 'mL to cups' },
+            { from: 'in', to: 'cm', cat: 'length', label: 'inches to cm' },
+            { from: 'lb', to: 'kg', cat: 'weight', label: 'lbs to kg' },
+            { from: 'F', to: 'C', cat: 'temperature', label: 'Fahrenheit to Celsius' },
+            { from: 'in', to: 'mm', cat: 'length', label: 'inches to mm' },
+            { from: 'ft', to: 'm', cat: 'length', label: 'feet to meters' },
+            { from: 'mi', to: 'km', cat: 'length', label: 'miles to km' },
+            { from: 'ft', to: 'cm', cat: 'length', label: 'feet to cm' },
+            { from: 'oz', to: 'g', cat: 'weight', label: 'ounces to grams' },
+            { from: 'ft', to: 'in', cat: 'length', label: 'feet to inches' },
+            { from: 'gal', to: 'l', cat: 'volume', label: 'gallons to liters' },
+            { from: 'oz', to: 'lb', cat: 'weight', label: 'ounces to pounds' },
+            { from: 'kph', to: 'mph', cat: 'speed', label: 'kph to mph' },
+            { from: 'ft2', to: 'acre', cat: 'area', label: 'sq feet to acres' },
+            { from: 'deg', to: 'rad', cat: 'angle', label: 'degrees to radians' },
+            { from: 'kw', to: 'hp', cat: 'power', label: 'kw to hp' },
+            { from: 'yd', to: 'm', cat: 'length', label: 'yards to meters' },
+            { from: 'cup', to: 'ml', cat: 'volume', label: 'cups to mL' }
+        ];
+        
+        // Full converter categories
+        var fullCategories = {
+            'Common Converters': [
+                'Length Converter', 'Weight and Mass Converter', 'Volume Converter',
+                'Temperature Converter', 'Area Converter', 'Pressure Converter',
+                'Energy Converter', 'Currency Converter', 'Power Converter',
+                'Force Converter', 'Time Converter', 'Speed Converter',
+                'Angle Converter', 'Data Storage Converter'
+            ],
+            'Engineering Converters': [
+                'Velocity - Angular Converter', 'Acceleration Converter',
+                'Acceleration - Angular Converter', 'Density Converter',
+                'Specific Volume Converter', 'Moment of Inertia Converter',
+                'Moment of Force Converter', 'Torque Converter'
+            ],
+            'Heat Converters': [
+                'Fuel Efficiency - Mass Converter', 'Fuel Efficiency - Volume Converter',
+                'Temperature Interval Converter', 'Thermal Expansion Converter',
+                'Thermal Resistance Converter', 'Thermal Conductivity Converter',
+                'Specific Heat Capacity Converter', 'Heat Density Converter',
+                'Heat Flux Density Converter', 'Heat Transfer Coefficient Converter'
+            ],
+            'Fluids Converters': [
+                'Flow Converter', 'Flow - Mass Converter', 'Flow - Molar Converter',
+                'Mass Flux Density Converter', 'Concentration - Molar Converter',
+                'Concentration - Solution Converter', 'Viscosity - Dynamic Converter',
+                'Viscosity - Kinematic Converter', 'Surface Tension Converter',
+                'Permeability Converter'
+            ],
+            'Light Converters': [
+                'Luminance Converter', 'Luminous Intensity Converter',
+                'Illumination Converter', 'Digital Image Resolution Converter',
+                'Frequency Wavelength Converter'
+            ],
+            'Electricity Converters': [
+                'Charge Converter', 'Linear Charge Density Converter',
+                'Surface Charge Density Converter', 'Volume Charge Density Converter',
+                'Current Converter', 'Linear Current Density Converter',
+                'Surface Current Density Converter', 'Electric Field Strength Converter',
+                'Electric Potential Converter', 'Electric Resistance Converter',
+                'Electric Resistivity Converter', 'Electric Conductance Converter',
+                'Electric Conductivity Converter', 'Electrostatic Capacitance',
+                'Inductance Converter'
+            ],
+            'Magnetism Converters': [
+                'Magnetomotive Force Converter', 'Magnetic Field Strength Converter',
+                'Magnetic Flux Converter', 'Magnetic Flux Density Converter'
+            ],
+            'Radiology Converters': [
+                'Radiation Converter', 'Radiation-Activity Converter',
+                'Radiation-Exposure Converter', 'Radiation-Absorbed Dose Converter'
+            ],
+            'Other Converters': [
+                'Prefixes Converter', 'Data Transfer Converter',
+                'Sound Converter', 'Typography Converter', 'Volume - Lumber Converter'
+            ]
+        };
+        
+        // Express tabs
+        var expressTabs = document.querySelectorAll('.uc-express-tab');
+        var currentCat = 'length';
+        
+        expressTabs.forEach(function(tab) {
+            tab.addEventListener('click', function() {
+                expressTabs.forEach(function(t) { t.classList.remove('active'); });
+                this.classList.add('active');
+                currentCat = this.dataset.cat;
+                populateUnitSelects(currentCat);
+            });
+        });
+        
+        function populateUnitSelects(cat) {
+            var data = unitData[cat];
+            if (!data) return;
+            
+            var fromSelect = document.getElementById('uc-from-unit');
+            var toSelect = document.getElementById('uc-to-unit');
+            
+            if (!fromSelect || !toSelect) return;
+            
+            var units = data.units;
+            var keys = Object.keys(units);
+            
+            fromSelect.innerHTML = keys.map(function(k, i) {
+                return '<option value="' + k + '"' + (i === 0 ? ' selected' : '') + '>' + units[k].name + ' (' + units[k].symbol + ')</option>';
+            }).join('');
+            
+            toSelect.innerHTML = keys.map(function(k, i) {
+                return '<option value="' + k + '"' + (i === 1 ? ' selected' : '') + '>' + units[k].name + ' (' + units[k].symbol + ')</option>';
+            }).join('');
+            
+            convertUnits();
+        }
+        
+        function convertUnits() {
+            var data = unitData[currentCat];
+            if (!data) return;
+            
+            var fromVal = parseFloat(document.getElementById('uc-from-value').value) || 0;
+            var fromUnit = document.getElementById('uc-from-unit').value;
+            var toUnit = document.getElementById('uc-to-unit').value;
+            var toInput = document.getElementById('uc-to-value');
+            
+            var result;
+            
+            if (data.type === 'temperature') {
+                result = convertTemperature(fromVal, fromUnit, toUnit);
+            } else {
+                var fromFactor = data.units[fromUnit].factor;
+                var toFactor = data.units[toUnit].factor;
+                result = fromVal * fromFactor / toFactor;
+            }
+            
+            toInput.value = formatNumber(result);
+        }
+        
+        function convertTemperature(val, from, to) {
+            // Convert to Celsius first
+            var celsius;
+            if (from === 'C') celsius = val;
+            else if (from === 'F') celsius = (val - 32) * 5/9;
+            else if (from === 'K') celsius = val - 273.15;
+            else if (from === 'R') celsius = (val - 491.67) * 5/9;
+            
+            // Convert from Celsius to target
+            if (to === 'C') return celsius;
+            if (to === 'F') return celsius * 9/5 + 32;
+            if (to === 'K') return celsius + 273.15;
+            if (to === 'R') return (celsius + 273.15) * 9/5;
+            return celsius;
+        }
+        
+        function formatNumber(num) {
+            if (isNaN(num)) return '0';
+            if (Math.abs(num) < 1e-10) return '0';
+            if (Math.abs(num) >= 1e10 || (Math.abs(num) < 0.0001 && num !== 0)) {
+                return num.toExponential(6);
+            }
+            return parseFloat(num.toPrecision(10)).toString();
+        }
+        
+        // Event listeners for express converter
+        var fromValue = document.getElementById('uc-from-value');
+        var fromUnit = document.getElementById('uc-from-unit');
+        var toUnit = document.getElementById('uc-to-unit');
+        var swapBtn = document.getElementById('uc-swap-btn');
+        
+        if (fromValue) fromValue.addEventListener('input', convertUnits);
+        if (fromUnit) fromUnit.addEventListener('change', convertUnits);
+        if (toUnit) toUnit.addEventListener('change', convertUnits);
+        
+        if (swapBtn) {
+            swapBtn.addEventListener('click', function() {
+                var tempUnit = fromUnit.value;
+                fromUnit.value = toUnit.value;
+                toUnit.value = tempUnit;
+                convertUnits();
+            });
+        }
+        
+        // Populate common conversions
+        var commonGrid = document.getElementById('uc-common-grid');
+        if (commonGrid) {
+            commonGrid.innerHTML = commonConversions.map(function(c) {
+                return '<div class="uc-common-item" data-cat="' + c.cat + '" data-from="' + c.from + '" data-to="' + c.to + '">' + c.label + '</div>';
+            }).join('');
+            
+            commonGrid.querySelectorAll('.uc-common-item').forEach(function(item) {
+                item.addEventListener('click', function() {
+                    var cat = this.dataset.cat;
+                    var from = this.dataset.from;
+                    var to = this.dataset.to;
+                    
+                    // Switch to the category tab
+                    expressTabs.forEach(function(t) {
+                        t.classList.remove('active');
+                        if (t.dataset.cat === cat) t.classList.add('active');
+                    });
+                    currentCat = cat;
+                    populateUnitSelects(cat);
+                    
+                    // Set units
+                    fromUnit.value = from;
+                    toUnit.value = to;
+                    convertUnits();
+                    
+                    // Scroll to converter
+                    document.querySelector('.uc-express-converter').scrollIntoView({ behavior: 'smooth' });
+                });
+            });
+        }
+        
+        // Populate full converter list
+        var fullListContainer = document.getElementById('uc-full-list-container');
+        if (fullListContainer) {
+            var html = '';
+            Object.keys(fullCategories).forEach(function(catName) {
+                html += '<div class="uc-full-category">' + catName + '</div>';
+                fullCategories[catName].forEach(function(item) {
+                    html += '<div class="uc-full-item">' + item + '</div>';
+                });
+            });
+            fullListContainer.innerHTML = html;
+            
+            // Click handlers for full list items
+            fullListContainer.querySelectorAll('.uc-full-item').forEach(function(item) {
+                item.addEventListener('click', function() {
+                    var text = this.textContent;
+                    // Try to map to a category
+                    var catMap = {
+                        'Length': 'length', 'Weight': 'weight', 'Mass': 'weight',
+                        'Volume': 'volume', 'Temperature': 'temperature',
+                        'Area': 'area', 'Pressure': 'pressure',
+                        'Energy': 'energy', 'Power': 'power',
+                        'Force': 'force', 'Time': 'time',
+                        'Speed': 'speed', 'Angle': 'angle',
+                        'Data Storage': 'data', 'Frequency': 'frequency'
+                    };
+                    
+                    for (var key in catMap) {
+                        if (text.indexOf(key) !== -1) {
+                            var cat = catMap[key];
+                            expressTabs.forEach(function(t) {
+                                t.classList.remove('active');
+                                if (t.dataset.cat === cat) t.classList.add('active');
+                            });
+                            currentCat = cat;
+                            populateUnitSelects(cat);
+                            document.querySelector('.uc-express-converter').scrollIntoView({ behavior: 'smooth' });
+                            break;
+                        }
+                    }
+                });
+            });
+        }
+        
+        // Find units functionality
+        var findFrom = document.getElementById('uc-find-from');
+        var findTo = document.getElementById('uc-find-to');
+        var findBtn = document.getElementById('uc-find-btn');
+        var findResult = document.getElementById('uc-find-result');
+        
+        if (findBtn) {
+            findBtn.addEventListener('click', function() {
+                var fromText = (findFrom.value || '').toLowerCase().trim();
+                var toText = (findTo.value || '').toLowerCase().trim();
+                
+                if (!fromText || !toText) {
+                    findResult.style.display = '';
+                    findResult.innerHTML = '<span style="color:var(--tx3)">Please enter both units to search</span>';
+                    return;
+                }
+                
+                // Search through all categories
+                var foundFrom = null, foundTo = null, foundCat = null;
+                
+                Object.keys(unitData).forEach(function(cat) {
+                    var units = unitData[cat].units;
+                    Object.keys(units).forEach(function(key) {
+                        var u = units[key];
+                        if (fromText && (u.name.toLowerCase().indexOf(fromText) !== -1 || u.symbol.toLowerCase().indexOf(fromText) !== -1 || key.toLowerCase().indexOf(fromText) !== -1)) {
+                            foundFrom = { key: key, cat: cat };
+                        }
+                        if (toText && (u.name.toLowerCase().indexOf(toText) !== -1 || u.symbol.toLowerCase().indexOf(toText) !== -1 || key.toLowerCase().indexOf(toText) !== -1)) {
+                            foundTo = { key: key, cat: cat };
+                        }
+                    });
+                });
+                
+                if (foundFrom && foundTo) {
+                    // Switch to the category
+                    currentCat = foundFrom.cat;
+                    expressTabs.forEach(function(t) {
+                        t.classList.remove('active');
+                        if (t.dataset.cat === foundFrom.cat) t.classList.add('active');
+                    });
+                    populateUnitSelects(foundFrom.cat);
+                    
+                    fromUnit.value = foundFrom.key;
+                    toUnit.value = foundTo.key;
+                    convertUnits();
+                    
+                    findResult.style.display = '';
+                    findResult.innerHTML = '<strong>Found:</strong> ' + unitData[foundFrom.cat].units[foundFrom.key].name + ' → ' + unitData[foundTo.cat].units[foundTo.key].name + '<br><strong>Result:</strong> 1 ' + unitData[foundFrom.cat].units[foundFrom.key].symbol + ' = ' + formatNumber(getConversionFactor(foundFrom, foundTo)) + ' ' + unitData[foundTo.cat].units[foundTo.key].symbol;
+                    
+                    document.querySelector('.uc-express-converter').scrollIntoView({ behavior: 'smooth' });
+                } else {
+                    findResult.style.display = '';
+                    findResult.innerHTML = '<span style="color:var(--tx3)">Units not found. Try: kilogram, lbs, meter, feet, celsius, fahrenheit, etc.</span>';
+                }
+            });
+        }
+        
+        function getConversionFactor(from, to) {
+            var data = unitData[from.cat];
+            if (data.type === 'temperature') return 'varies';
+            return data.units[from.key].factor / data.units[to.key].factor;
+        }
+        
+        // Initialize
+        populateUnitSelects('length');
     }
     
     // Scientific Calculator: 3-Panel Event Handlers
