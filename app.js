@@ -3078,6 +3078,63 @@ window.openGenericTool = function(toolId) {
             t: 'Calculator', d: 'Basic arithmetic calculator',
             type: 'calc', placeholder: 'Enter expression (e.g., 25 * 4 + 10)...'
         },
+        'unit-converter': {
+            t: 'Unit Converter', d: 'Convert between different units of measurement',
+            type: 'unit',
+            controls: [
+                { type: 'select', id: 'unit-category', label: 'Category', options: [
+                    { value: 'length', text: 'Length' },
+                    { value: 'weight', text: 'Weight' },
+                    { value: 'temperature', text: 'Temperature' },
+                    { value: 'volume', text: 'Volume' }
+                ]},
+                { type: 'select', id: 'unit-from', label: 'From', options: [
+                    { value: 'm', text: 'Meter (m)' },
+                    { value: 'km', text: 'Kilometer (km)' },
+                    { value: 'cm', text: 'Centimeter (cm)' },
+                    { value: 'mm', text: 'Millimeter (mm)' },
+                    { value: 'ft', text: 'Foot (ft)' },
+                    { value: 'in', text: 'Inch (in)' },
+                    { value: 'mi', text: 'Mile (mi)' }
+                ]},
+                { type: 'select', id: 'unit-to', label: 'To', options: [
+                    { value: 'ft', text: 'Foot (ft)' },
+                    { value: 'm', text: 'Meter (m)' },
+                    { value: 'km', text: 'Kilometer (km)' },
+                    { value: 'cm', text: 'Centimeter (cm)' },
+                    { value: 'mm', text: 'Millimeter (mm)' },
+                    { value: 'in', text: 'Inch (in)' },
+                    { value: 'mi', text: 'Mile (mi)' }
+                ]},
+                { type: 'number', id: 'unit-value', label: 'Value', value: '1', placeholder: 'Enter value' }
+            ]
+        },
+        'percentage-calc': {
+            t: 'Percentage Calculator', d: 'Calculate percentages quickly',
+            type: 'percentage',
+            controls: [
+                { type: 'select', id: 'pct-mode', label: 'Mode', options: [
+                    { value: 'what-is', text: 'What is X% of Y?' },
+                    { value: 'is-what-pct', text: 'X is what % of Y?' },
+                    { value: 'pct-change', text: 'Percentage change from X to Y' }
+                ]},
+                { type: 'number', id: 'pct-a', label: 'Value A', value: '50', placeholder: 'First value' },
+                { type: 'number', id: 'pct-b', label: 'Value B', value: '200', placeholder: 'Second value' }
+            ]
+        },
+        'date-calculator': {
+            t: 'Date Calculator', d: 'Calculate difference between dates or add/subtract days',
+            type: 'date',
+            controls: [
+                { type: 'select', id: 'date-mode', label: 'Mode', options: [
+                    { value: 'diff', text: 'Difference between dates' },
+                    { value: 'add', text: 'Add/Subtract days' }
+                ]},
+                { type: 'date', id: 'date-from', label: 'From Date' },
+                { type: 'date', id: 'date-to', label: 'To Date' },
+                { type: 'number', id: 'date-days', label: 'Days to add/subtract', value: '30', placeholder: 'Positive or negative' }
+            ]
+        },
         'color-converter': {
             t: 'Color Converter', d: 'Convert HEX to RGB colors',
             type: 'color', placeholder: 'Enter HEX color (e.g., #3b82f6)...'
@@ -3200,6 +3257,11 @@ window.openGenericTool = function(toolId) {
                 html += '<label class="gt-label" id="lbl-gt-' + ctrl.id + '">' + ctrl.label + '</label>';
                 html += '<input type="number" id="gt-' + ctrl.id + '" class="gt-input-field" value="' + (ctrl.value || '') + '" placeholder="' + (ctrl.placeholder || '') + '" oninput="(function(){var o=document.getElementById(\'gt-output\');if(o)o.innerHTML=\'\';})()" />';
                 html += '</div>';
+            } else if (ctrl.type === 'date') {
+                html += '<div class="gt-control-item">';
+                html += '<label class="gt-label">' + ctrl.label + '</label>';
+                html += '<input type="date" id="gt-' + ctrl.id + '" class="gt-input-field" value="' + (ctrl.value || '') + '" />';
+                html += '</div>';
             }
         });
         html += '</div>';
@@ -3264,6 +3326,13 @@ window.openGenericTool = function(toolId) {
     var previewImg = document.getElementById('gt-preview-img');
     
     var selectedFile = null;
+    
+    // Enable process button immediately for non-file tools
+    if (config.type !== 'file') {
+        processBtn.disabled = false;
+        // Hide upload zone for non-file tools
+        if (uploadZone) uploadZone.style.display = 'none';
+    }
     
     // Browse button
     if (browseBtn) {
@@ -3706,8 +3775,73 @@ window.openGenericTool = function(toolId) {
                 } else {
                     alert('Please enter a color value');
                 }
+            } else if (config.type === 'unit') {
+                processUnitTool(output);
+            } else if (config.type === 'percentage') {
+                processPercentageTool(output);
+            } else if (config.type === 'date') {
+                processDateTool(output);
             }
         };
+    }
+    
+    // Unit converter: update From/To options when category changes
+    var unitCategory = document.getElementById('gt-unit-category');
+    if (unitCategory) {
+        var unitOptions = {
+            length: [
+                { value: 'm', text: 'Meter (m)' }, { value: 'km', text: 'Kilometer (km)' },
+                { value: 'cm', text: 'Centimeter (cm)' }, { value: 'mm', text: 'Millimeter (mm)' },
+                { value: 'ft', text: 'Foot (ft)' }, { value: 'in', text: 'Inch (in)' }, { value: 'mi', text: 'Mile (mi)' }
+            ],
+            weight: [
+                { value: 'kg', text: 'Kilogram (kg)' }, { value: 'g', text: 'Gram (g)' },
+                { value: 'mg', text: 'Milligram (mg)' }, { value: 'lb', text: 'Pound (lb)' },
+                { value: 'oz', text: 'Ounce (oz)' }, { value: 'ton', text: 'Metric Ton' }
+            ],
+            temperature: [
+                { value: 'c', text: 'Celsius (°C)' }, { value: 'f', text: 'Fahrenheit (°F)' }, { value: 'k', text: 'Kelvin (K)' }
+            ],
+            volume: [
+                { value: 'l', text: 'Liter (L)' }, { value: 'ml', text: 'Milliliter (mL)' },
+                { value: 'gal', text: 'Gallon (gal)' }, { value: 'qt', text: 'Quart (qt)' },
+                { value: 'pt', text: 'Pint (pt)' }, { value: 'cup', text: 'Cup' }, { value: 'floz', text: 'Fluid Ounce (fl oz)' }
+            ]
+        };
+        
+        function updateUnitOptions() {
+            var cat = unitCategory.value;
+            var options = unitOptions[cat] || [];
+            var fromSelect = document.getElementById('gt-unit-from');
+            var toSelect = document.getElementById('gt-unit-to');
+            
+            if (fromSelect) {
+                fromSelect.innerHTML = options.map(function(opt, i) {
+                    return '<option value="' + opt.value + '"' + (i === 0 ? ' selected' : '') + '>' + opt.text + '</option>';
+                }).join('');
+            }
+            if (toSelect) {
+                toSelect.innerHTML = options.map(function(opt, i) {
+                    return '<option value="' + opt.value + '"' + (i === 1 ? ' selected' : '') + '>' + opt.text + '</option>';
+                }).join('');
+            }
+        }
+        
+        unitCategory.addEventListener('change', updateUnitOptions);
+        updateUnitOptions(); // Initialize
+    }
+    
+    // Date calculator: set default dates
+    var dateFrom = document.getElementById('gt-date-from');
+    var dateTo = document.getElementById('gt-date-to');
+    if (dateFrom && !dateFrom.value) {
+        var today = new Date();
+        dateFrom.value = today.toISOString().split('T')[0];
+    }
+    if (dateTo && !dateTo.value) {
+        var future = new Date();
+        future.setDate(future.getDate() + 30);
+        dateTo.value = future.toISOString().split('T')[0];
     }
     
     // Store config for processFileTool to access
@@ -3804,6 +3938,179 @@ function processCalcTool(id, val, out) {
     } catch(e) {
         out.innerHTML = '<span style="color:var(--danger)">Invalid mathematical expression</span>';
     }
+}
+
+function processUnitTool(out) {
+    var category = document.getElementById('gt-unit-category');
+    var fromUnit = document.getElementById('gt-unit-from');
+    var toUnit = document.getElementById('gt-unit-to');
+    var value = document.getElementById('gt-unit-value');
+    
+    if (!category || !fromUnit || !toUnit || !value) {
+        out.textContent = 'Error: Unit converter controls not found';
+        return;
+    }
+    
+    var cat = category.value;
+    var from = fromUnit.value;
+    var to = toUnit.value;
+    var val = parseFloat(value.value);
+    
+    if (isNaN(val)) {
+        out.innerHTML = '<span style="color:var(--danger)">Please enter a valid number</span>';
+        return;
+    }
+    
+    // Conversion factors to base unit
+    var factors = {
+        length: { m: 1, km: 1000, cm: 0.01, mm: 0.001, ft: 0.3048, in: 0.0254, mi: 1609.344 },
+        weight: { kg: 1, g: 0.001, mg: 0.000001, lb: 0.453592, oz: 0.0283495, ton: 1000 },
+        volume: { l: 1, ml: 0.001, gal: 3.78541, qt: 0.946353, pt: 0.473176, cup: 0.236588, floz: 0.0295735 }
+    };
+    
+    var result;
+    
+    if (cat === 'temperature') {
+        // Special handling for temperature
+        if (from === to) {
+            result = val;
+        } else if (from === 'c') {
+            if (to === 'f') result = (val * 9/5) + 32;
+            else if (to === 'k') result = val + 273.15;
+        } else if (from === 'f') {
+            if (to === 'c') result = (val - 32) * 5/9;
+            else if (to === 'k') result = (val - 32) * 5/9 + 273.15;
+        } else if (from === 'k') {
+            if (to === 'c') result = val - 273.15;
+            else if (to === 'f') result = (val - 273.15) * 9/5 + 32;
+        }
+    } else {
+        // Standard conversion using base unit
+        var unitFactors = factors[cat];
+        if (unitFactors && unitFactors[from] && unitFactors[to]) {
+            var baseValue = val * unitFactors[from];
+            result = baseValue / unitFactors[to];
+        } else {
+            out.innerHTML = '<span style="color:var(--danger)">Invalid unit combination</span>';
+            return;
+        }
+    }
+    
+    var unitLabels = {
+        length: { m: 'm', km: 'km', cm: 'cm', mm: 'mm', ft: 'ft', in: 'in', mi: 'mi' },
+        weight: { kg: 'kg', g: 'g', mg: 'mg', lb: 'lb', oz: 'oz', ton: 'ton' },
+        volume: { l: 'L', ml: 'mL', gal: 'gal', qt: 'qt', pt: 'pt', cup: 'cup', floz: 'fl oz' },
+        temperature: { c: '°C', f: '°F', k: 'K' }
+    };
+    
+    var fromLabel = (unitLabels[cat] && unitLabels[cat][from]) ? unitLabels[cat][from] : from;
+    var toLabel = (unitLabels[cat] && unitLabels[cat][to]) ? unitLabels[cat][to] : to;
+    
+    out.innerHTML = '<div style="font-size:24px; font-weight:700; color:var(--accent);">' + 
+        parseFloat(result.toFixed(6)) + ' ' + toLabel + '</div>' +
+        '<div style="font-size:13px; color:var(--tx2); margin-top:6px;">' + 
+        val + ' ' + fromLabel + ' = ' + parseFloat(result.toFixed(6)) + ' ' + toLabel + '</div>';
+}
+
+function processPercentageTool(out) {
+    var mode = document.getElementById('gt-pct-mode');
+    var a = document.getElementById('gt-pct-a');
+    var b = document.getElementById('gt-pct-b');
+    
+    if (!mode || !a || !b) {
+        out.textContent = 'Error: Percentage calculator controls not found';
+        return;
+    }
+    
+    var valA = parseFloat(a.value);
+    var valB = parseFloat(b.value);
+    
+    if (isNaN(valA) || isNaN(valB)) {
+        out.innerHTML = '<span style="color:var(--danger)">Please enter valid numbers</span>';
+        return;
+    }
+    
+    var result, explanation;
+    
+    switch (mode.value) {
+        case 'what-is':
+            result = (valA / 100) * valB;
+            explanation = valA + '% of ' + valB + ' = ' + parseFloat(result.toFixed(4));
+            break;
+        case 'is-what-pct':
+            if (valB === 0) {
+                out.innerHTML = '<span style="color:var(--danger)">Cannot divide by zero</span>';
+                return;
+            }
+            result = (valA / valB) * 100;
+            explanation = valA + ' is ' + parseFloat(result.toFixed(2)) + '% of ' + valB;
+            break;
+        case 'pct-change':
+            if (valA === 0) {
+                out.innerHTML = '<span style="color:var(--danger)">Original value cannot be zero</span>';
+                return;
+            }
+            result = ((valB - valA) / valA) * 100;
+            var change = result >= 0 ? 'increase' : 'decrease';
+            explanation = 'From ' + valA + ' to ' + valB + ': ' + parseFloat(Math.abs(result).toFixed(2)) + '% ' + change;
+            break;
+        default:
+            explanation = 'Please select a calculation mode';
+    }
+    
+    out.innerHTML = '<div style="font-size:20px; font-weight:700; color:var(--accent);">' + explanation + '</div>';
+}
+
+function processDateTool(out) {
+    var mode = document.getElementById('gt-date-mode');
+    var dateFrom = document.getElementById('gt-date-from');
+    var dateTo = document.getElementById('gt-date-to');
+    var dateDays = document.getElementById('gt-date-days');
+    
+    if (!mode || !dateFrom || !dateTo || !dateDays) {
+        out.textContent = 'Error: Date calculator controls not found';
+        return;
+    }
+    
+    var result, explanation;
+    
+    if (mode.value === 'diff') {
+        if (!dateFrom.value || !dateTo.value) {
+            out.innerHTML = '<span style="color:var(--danger)">Please select both dates</span>';
+            return;
+        }
+        var d1 = new Date(dateFrom.value);
+        var d2 = new Date(dateTo.value);
+        var diffMs = Math.abs(d2 - d1);
+        var diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+        var diffWeeks = Math.floor(diffDays / 7);
+        var diffMonths = Math.floor(diffDays / 30.44);
+        var diffYears = Math.floor(diffDays / 365.25);
+        
+        explanation = '<div style="font-size:28px; font-weight:700; color:var(--accent);">' + diffDays + ' days</div>' +
+            '<div style="font-size:13px; color:var(--tx2); margin-top:8px;">' +
+            '≈ ' + diffWeeks + ' weeks | ' + diffMonths + ' months | ' + diffYears + ' years</div>' +
+            '<div style="font-size:12px; color:var(--tx3); margin-top:4px;">' +
+            dateFrom.value + ' → ' + dateTo.value + '</div>';
+    } else {
+        if (!dateFrom.value) {
+            out.innerHTML = '<span style="color:var(--danger)">Please select a start date</span>';
+            return;
+        }
+        var days = parseInt(dateDays.value) || 0;
+        var startDate = new Date(dateFrom.value);
+        var resultDate = new Date(startDate);
+        resultDate.setDate(resultDate.getDate() + days);
+        
+        var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        var formattedResult = resultDate.toLocaleDateString('en-US', options);
+        
+        explanation = '<div style="font-size:20px; font-weight:700; color:var(--accent);">' + formattedResult + '</div>' +
+            '<div style="font-size:13px; color:var(--tx2); margin-top:8px;">' +
+            (days >= 0 ? '+' : '') + days + ' days from ' + dateFrom.value + '</div>';
+    }
+    
+    out.innerHTML = explanation;
 }
 
 function processFileTool(id, file, out) {
