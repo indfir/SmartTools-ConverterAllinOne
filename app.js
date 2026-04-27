@@ -3452,7 +3452,8 @@ window.openGenericTool = function(toolId) {
         html += '</div>'; // End converter row
         html += '</div>'; // End express converter
         
-        // Find Units Section
+        // Find Units Section and Common Conversions in two columns
+        html += '<div class="uc-lower-sections">';
         html += '<div class="uc-find-section">';
         html += '<h3 class="uc-section-title"><i class="ph ph-magnifying-glass"></i> Find Units</h3>';
         html += '<div class="uc-find-row">';
@@ -3468,9 +3469,10 @@ window.openGenericTool = function(toolId) {
         html += '<h3 class="uc-section-title"><i class="ph ph-lightning"></i> Common Conversions</h3>';
         html += '<div class="uc-common-grid" id="uc-common-grid"></div>';
         html += '</div>';
+        html += '</div>'; // End lower sections
         
         // Full Converter List
-        html += '<div class="uc-full-list">';
+        html += '<div class="uc-full-list" style="margin-top:16px;">';
         html += '<h3 class="uc-section-title"><i class="ph ph-list-dashes"></i> All Converters</h3>';
         html += '<div class="uc-full-list-container" id="uc-full-list-container"></div>';
         html += '</div>';
