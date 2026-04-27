@@ -3075,8 +3075,8 @@ window.openGenericTool = function(toolId) {
             type: 'text', placeholder: 'Enter Markdown text...'
         },
         'calculator': {
-            t: 'Calculator', d: 'Basic arithmetic calculator',
-            type: 'calc', placeholder: 'Enter expression (e.g., 25 * 4 + 10)...'
+            t: 'Calculator', d: 'Scientific calculator with advanced functions',
+            type: 'scientific-calc'
         },
         'unit-converter': {
             t: 'Unit Converter', d: 'Convert between different units of measurement',
@@ -3291,6 +3291,60 @@ window.openGenericTool = function(toolId) {
         html += '</div>';
     }
     
+    // Scientific Calculator
+    if (config.type === 'scientific-calc') {
+        html += '<div class="gt-scientific-calc">';
+        html += '<div class="calc-display">';
+        html += '<div class="calc-expression" id="calc-expression"></div>';
+        html += '<div class="calc-result" id="calc-result">0</div>';
+        html += '</div>';
+        html += '<div class="calc-buttons">';
+        // Row 1: Scientific functions
+        html += '<button class="calc-btn calc-fn" data-val="sin(">sin</button>';
+        html += '<button class="calc-btn calc-fn" data-val="cos(">cos</button>';
+        html += '<button class="calc-btn calc-fn" data-val="tan(">tan</button>';
+        html += '<button class="calc-btn calc-fn" data-val="log(">log</button>';
+        html += '<button class="calc-btn calc-fn" data-val="ln(">ln</button>';
+        html += '<button class="calc-btn calc-fn" data-val="sqrt(">√</button>';
+        // Row 2: More scientific + clear
+        html += '<button class="calc-btn calc-fn" data-val="^">xʸ</button>';
+        html += '<button class="calc-btn calc-fn" data-val="^2">x²</button>';
+        html += '<button class="calc-btn calc-fn" data-val="pi">π</button>';
+        html += '<button class="calc-btn calc-fn" data-val="e">e</button>';
+        html += '<button class="calc-btn calc-fn" data-val="!(">n!</button>';
+        html += '<button class="calc-btn calc-clear" data-action="clear">AC</button>';
+        // Row 3: Parentheses + operators
+        html += '<button class="calc-btn calc-fn" data-val="(">(</button>';
+        html += '<button class="calc-btn calc-fn" data-val=")">)</button>';
+        html += '<button class="calc-btn calc-fn" data-val="%">%</button>';
+        html += '<button class="calc-btn calc-fn" data-val="1/">1/x</button>';
+        html += '<button class="calc-btn calc-op" data-val="/">÷</button>';
+        html += '<button class="calc-btn calc-del" data-action="del">⌫</button>';
+        // Row 4: 7 8 9 ×
+        html += '<button class="calc-btn calc-num" data-val="7">7</button>';
+        html += '<button class="calc-btn calc-num" data-val="8">8</button>';
+        html += '<button class="calc-btn calc-num" data-val="9">9</button>';
+        html += '<button class="calc-btn calc-op" data-val="*">×</button>';
+        html += '<button class="calc-btn calc-num" data-val="." style="grid-column: span 2;">.</button>';
+        // Row 5: 4 5 6 -
+        html += '<button class="calc-btn calc-num" data-val="4">4</button>';
+        html += '<button class="calc-btn calc-num" data-val="5">5</button>';
+        html += '<button class="calc-btn calc-num" data-val="6">6</button>';
+        html += '<button class="calc-btn calc-op" data-val="-">−</button>';
+        html += '<button class="calc-btn calc-equals" data-action="equals" style="grid-row: span 2;">=</button>';
+        // Row 6: 1 2 3 +
+        html += '<button class="calc-btn calc-num" data-val="1">1</button>';
+        html += '<button class="calc-btn calc-num" data-val="2">2</button>';
+        html += '<button class="calc-btn calc-num" data-val="3">3</button>';
+        html += '<button class="calc-btn calc-op" data-val="+">+</button>';
+        // Row 7: 0 (wide)
+        html += '<button class="calc-btn calc-num" data-val="0" style="grid-column: span 2;">0</button>';
+        html += '<button class="calc-btn calc-num" data-val="+/-">±</button>';
+        html += '<button class="calc-btn calc-fn" data-val="abs(">|x|</button>';
+        html += '</div>';
+        html += '</div>';
+    }
+    
     // Note
     if (config.note) {
         html += '<div class="gt-note"><i class="ph ph-info"></i> ' + config.note + '</div>';
@@ -3332,6 +3386,12 @@ window.openGenericTool = function(toolId) {
         processBtn.disabled = false;
         // Hide upload zone for non-file tools
         if (uploadZone) uploadZone.style.display = 'none';
+    }
+    
+    // Scientific calculator: hide process button and output (calculates live)
+    if (config.type === 'scientific-calc') {
+        if (processBtn) processBtn.style.display = 'none';
+        if (output) output.style.display = 'none';
     }
     
     // Browse button
@@ -3842,6 +3902,171 @@ window.openGenericTool = function(toolId) {
         var future = new Date();
         future.setDate(future.getDate() + 30);
         dateTo.value = future.toISOString().split('T')[0];
+    }
+    
+    // Scientific Calculator: button event handlers
+    var calcDisplay = document.getElementById('calc-result');
+    var calcExpr = document.getElementById('calc-expression');
+    var calcExpression = '';
+    var calcLastResult = '';
+    
+    if (calcDisplay) {
+        document.querySelectorAll('.calc-btn').forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                var val = this.dataset.val;
+                var action = this.dataset.action;
+                
+                if (action === 'clear') {
+                    calcExpression = '';
+                    calcLastResult = '';
+                    calcExpr.textContent = '';
+                    calcDisplay.textContent = '0';
+                    return;
+                }
+                
+                if (action === 'del') {
+                    calcExpression = calcExpression.slice(0, -1);
+                    calcExpr.textContent = formatExpression(calcExpression);
+                    if (calcExpression === '') calcDisplay.textContent = '0';
+                    return;
+                }
+                
+                if (action === 'equals') {
+                    if (calcExpression) {
+                        try {
+                            var result = evaluateCalcExpression(calcExpression);
+                            calcExpr.textContent = formatExpression(calcExpression) + ' =';
+                            calcDisplay.textContent = formatResult(result);
+                            calcLastResult = result.toString();
+                            calcExpression = result.toString();
+                        } catch(e) {
+                            calcDisplay.textContent = 'Error';
+                        }
+                    }
+                    return;
+                }
+                
+                if (val === '+/-') {
+                    // Toggle sign of last number
+                    var match = calcExpression.match(/([\d.]+)$/);
+                    if (match) {
+                        var num = match[1];
+                        var prefix = calcExpression.slice(0, -num.length);
+                        if (num.startsWith('-')) {
+                            calcExpression = prefix + num.slice(1);
+                        } else {
+                            calcExpression = prefix + '-' + num;
+                        }
+                        calcExpr.textContent = formatExpression(calcExpression);
+                    }
+                    return;
+                }
+                
+                calcExpression += val;
+                calcExpr.textContent = formatExpression(calcExpression);
+                
+                // Live preview
+                try {
+                    var preview = evaluateCalcExpression(calcExpression);
+                    if (!isNaN(preview) && isFinite(preview)) {
+                        calcDisplay.textContent = formatResult(preview);
+                    }
+                } catch(e) {}
+            });
+        });
+        
+        // Keyboard support
+        document.addEventListener('keydown', function(e) {
+            if (config.type !== 'scientific-calc') return;
+            var key = e.key;
+            if (key >= '0' && key <= '9') {
+                calcExpression += key;
+                calcExpr.textContent = formatExpression(calcExpression);
+            } else if (key === '+' || key === '-' || key === '*' || key === '/') {
+                calcExpression += key;
+                calcExpr.textContent = formatExpression(calcExpression);
+            } else if (key === '.') {
+                calcExpression += '.';
+                calcExpr.textContent = formatExpression(calcExpression);
+            } else if (key === 'Enter' || key === '=') {
+                e.preventDefault();
+                if (calcExpression) {
+                    try {
+                        var result = evaluateCalcExpression(calcExpression);
+                        calcExpr.textContent = formatExpression(calcExpression) + ' =';
+                        calcDisplay.textContent = formatResult(result);
+                        calcExpression = result.toString();
+                    } catch(err) {
+                        calcDisplay.textContent = 'Error';
+                    }
+                }
+            } else if (key === 'Backspace') {
+                calcExpression = calcExpression.slice(0, -1);
+                calcExpr.textContent = formatExpression(calcExpression);
+                if (calcExpression === '') calcDisplay.textContent = '0';
+            } else if (key === 'Escape') {
+                calcExpression = '';
+                calcExpr.textContent = '';
+                calcDisplay.textContent = '0';
+            }
+        });
+    }
+    
+    function formatExpression(expr) {
+        return expr
+            .replace(/\*/g, '×')
+            .replace(/\//g, '÷')
+            .replace(/sqrt\(/g, '√(')
+            .replace(/pi/g, 'π')
+            .replace(/\^2/g, '²')
+            .replace(/\^/g, '^');
+    }
+    
+    function formatResult(num) {
+        if (isNaN(num) || !isFinite(num)) return 'Error';
+        if (Number.isInteger(num) && Math.abs(num) < 1e15) return num.toString();
+        var str = num.toPrecision(10);
+        return parseFloat(str).toString();
+    }
+    
+    function factorial(n) {
+        if (n < 0) return NaN;
+        if (n === 0 || n === 1) return 1;
+        if (n > 170) return Infinity;
+        var result = 1;
+        for (var i = 2; i <= n; i++) result *= i;
+        return result;
+    }
+    
+    function evaluateCalcExpression(expr) {
+        // Replace mathematical functions and constants
+        var processed = expr
+            .replace(/sin\(/g, 'Math.sin(')
+            .replace(/cos\(/g, 'Math.cos(')
+            .replace(/tan\(/g, 'Math.tan(')
+            .replace(/log\(/g, 'Math.log10(')
+            .replace(/ln\(/g, 'Math.log(')
+            .replace(/sqrt\(/g, 'Math.sqrt(')
+            .replace(/abs\(/g, 'Math.abs(')
+            .replace(/pi/g, 'Math.PI')
+            .replace(/e(?![xp])/g, 'Math.E')
+            .replace(/\^2/g, '**2')
+            .replace(/\^/g, '**')
+            .replace(/!(?!\()/g, ''); // Handle factorial
+        
+        // Handle factorial: find n! pattern
+        processed = processed.replace(/(\d+)!/g, function(match, num) {
+            return factorial(parseInt(num));
+        });
+        
+        // Handle 1/x pattern
+        processed = processed.replace(/1\/(\d+\.?\d*)/g, function(match, num) {
+            return '(1/' + num + ')';
+        });
+        
+        // Evaluate
+        var result = eval(processed);
+        return result;
     }
     
     // Store config for processFileTool to access
