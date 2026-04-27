@@ -3417,46 +3417,47 @@ window.openGenericTool = function(toolId) {
         // Express Version Tabs
         html += '<div class="uc-express-tabs">';
         html += '<button class="uc-express-tab active" data-cat="length"><i class="ph ph-ruler"></i> Length</button>';
-        html += '<button class="uc-express-tab" data-cat="temperature"><i class="ph ph-thermometer"></i> Temperature</button>';
+        html += '<button class="uc-express-tab" data-cat="temperature"><i class="ph ph-thermometer"></i> Temp</button>';
         html += '<button class="uc-express-tab" data-cat="area"><i class="ph ph-square"></i> Area</button>';
         html += '<button class="uc-express-tab" data-cat="volume"><i class="ph ph-drop"></i> Volume</button>';
         html += '<button class="uc-express-tab" data-cat="weight"><i class="ph ph-scales"></i> Weight</button>';
         html += '<button class="uc-express-tab" data-cat="time"><i class="ph ph-clock"></i> Time</button>';
         html += '</div>';
         
-        // Express Converter
+        // Express Converter - Compact Row Layout
         html += '<div class="uc-express-converter">';
-        html += '<div class="uc-input-group">';
-        html += '<label class="uc-label">From:</label>';
-        html += '<div class="uc-input-row">';
-        html += '<input type="number" class="uc-input uc-from-value" id="uc-from-value" value="1" />';
-        html += '<select class="uc-select uc-from-unit" id="uc-from-unit"></select>';
+        html += '<div class="uc-converter-row">';
+        
+        // FROM section
+        html += '<div class="uc-field uc-field-from">';
+        html += '<label class="uc-field-label">From</label>';
+        html += '<div class="uc-field-inputs">';
+        html += '<input type="number" class="uc-field-value" id="uc-from-value" value="1" />';
+        html += '<select class="uc-field-select" id="uc-from-unit"></select>';
         html += '</div>';
         html += '</div>';
         
-        html += '<div class="uc-swap-btn" id="uc-swap-btn"><i class="ph ph-arrows-left-right"></i></div>';
+        // Swap button
+        html += '<button class="uc-swap-btn" id="uc-swap-btn" title="Swap units"><i class="ph ph-arrows-left-right"></i></button>';
         
-        html += '<div class="uc-input-group">';
-        html += '<label class="uc-label">To:</label>';
-        html += '<div class="uc-input-row">';
-        html += '<input type="number" class="uc-input uc-to-value" id="uc-to-value" readonly />';
-        html += '<select class="uc-select uc-to-unit" id="uc-to-unit"></select>';
+        // TO section
+        html += '<div class="uc-field uc-field-to">';
+        html += '<label class="uc-field-label">To</label>';
+        html += '<div class="uc-field-inputs">';
+        html += '<input type="number" class="uc-field-value uc-field-result" id="uc-to-value" readonly />';
+        html += '<select class="uc-field-select" id="uc-to-unit"></select>';
         html += '</div>';
         html += '</div>';
-        html += '</div>';
+        
+        html += '</div>'; // End converter row
+        html += '</div>'; // End express converter
         
         // Find Units Section
         html += '<div class="uc-find-section">';
-        html += '<h3 class="uc-section-title"><i class="ph ph-magnifying-glass"></i> Find the Units to Convert</h3>';
+        html += '<h3 class="uc-section-title"><i class="ph ph-magnifying-glass"></i> Find Units</h3>';
         html += '<div class="uc-find-row">';
-        html += '<div class="uc-find-input-group">';
-        html += '<label class="uc-label">From Unit:</label>';
         html += '<input type="text" class="uc-find-input" id="uc-find-from" placeholder="e.g. kilogram" />';
-        html += '</div>';
-        html += '<div class="uc-find-input-group">';
-        html += '<label class="uc-label">To Unit:</label>';
         html += '<input type="text" class="uc-find-input" id="uc-find-to" placeholder="e.g. lbs" />';
-        html += '</div>';
         html += '<button class="uc-find-btn" id="uc-find-btn"><i class="ph ph-arrow-right"></i> Convert</button>';
         html += '</div>';
         html += '<div class="uc-find-result" id="uc-find-result" style="display:none;"></div>';
@@ -3465,17 +3466,13 @@ window.openGenericTool = function(toolId) {
         // Common Conversions
         html += '<div class="uc-common-section">';
         html += '<h3 class="uc-section-title"><i class="ph ph-lightning"></i> Common Conversions</h3>';
-        html += '<div class="uc-common-grid" id="uc-common-grid">';
-        // Will be populated by JS
-        html += '</div>';
+        html += '<div class="uc-common-grid" id="uc-common-grid"></div>';
         html += '</div>';
         
         // Full Converter List
         html += '<div class="uc-full-list">';
-        html += '<h3 class="uc-section-title"><i class="ph ph-list-dashes"></i> Unit Converters — Full Versions</h3>';
-        html += '<div class="uc-full-list-container" id="uc-full-list-container">';
-        // Will be populated by JS
-        html += '</div>';
+        html += '<h3 class="uc-section-title"><i class="ph ph-list-dashes"></i> All Converters</h3>';
+        html += '<div class="uc-full-list-container" id="uc-full-list-container"></div>';
         html += '</div>';
         
         html += '</div>'; // End unit-converter-full
