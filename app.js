@@ -3384,8 +3384,14 @@ window.openGenericTool = function(toolId) {
     // Enable process button immediately for non-file tools
     if (config.type !== 'file') {
         processBtn.disabled = false;
-        // Hide upload zone for non-file tools
+        // Hide upload zone and preview area for non-file tools
         if (uploadZone) uploadZone.style.display = 'none';
+        if (filePreview) filePreview.style.display = 'none';
+        // Hide the entire preview area container
+        var previewArea = document.querySelector('.gt-preview-area');
+        if (previewArea) previewArea.style.display = 'none';
+        // Show controls immediately for non-file tools
+        if (controls) controls.style.display = '';
     }
     
     // Scientific calculator: hide process button and output (calculates live)
