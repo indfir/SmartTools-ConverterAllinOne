@@ -157,6 +157,16 @@ function setupNavigation() {
             switchPage(this.dataset.page);
         });
     });
+    
+    // Category filter nav items
+    document.querySelectorAll('.nav-item[data-category]').forEach(function(item) {
+        item.addEventListener('click', function(e) {
+            e.preventDefault();
+            var catId = this.dataset.category;
+            filterCategory(catId, this);
+        });
+    });
+    
     document.querySelectorAll('.tool-card[data-page]').forEach(function(card) {
         card.addEventListener('click', function() { switchPage(this.dataset.page); });
     });
@@ -164,6 +174,86 @@ function setupNavigation() {
         action.addEventListener('click', function() { switchPage(this.dataset.page); });
     });
 }
+
+// Category filtering function
+function filterCategory(catId, clickedNav) {
+    // Update active nav state
+    document.querySelectorAll('.nav-item[data-category]').forEach(function(item) {
+        item.classList.remove('active');
+    });
+    clickedNav.classList.add('active');
+    
+    // Switch to home page if not already there
+    if (state.currentPage !== 'home') {
+        switchPage('home');
+    }
+    
+    var dashboard = document.querySelector('.everytools-dashboard');
+    var categories = document.querySelectorAll('.et-category');
+    
+    if (catId === 'all') {
+        // Show all categories
+        categories.forEach(function(cat) {
+            cat.classList.remove('hidden');
+            cat.classList.add('visible');
+        });
+        // Hide filter header
+        var filterHeader = document.querySelector('.filter-header');
+        if (filterHeader) filterHeader.classList.remove('active');
+    } else {
+        // Show only selected category
+        categories.forEach(function(cat) {
+            if (cat.id === catId) {
+                cat.classList.remove('hidden');
+                cat.classList.add('visible');
+            } else {
+                cat.classList.add('hidden');
+                cat.classList.remove('visible');
+            }
+        });
+        
+        // Show filter header with clear button
+        var filterHeader = document.querySelector('.filter-header');
+        if (!filterHeader) {
+            // Create filter header
+            filterHeader = document.createElement('div');
+            filterHeader.className = 'filter-header';
+            filterHeader.innerHTML = 
+                '<span class="filter-header-title" id="filter-title"></span>' +
+                '<span class="filter-header-count" id="filter-count"></span>' +
+                '<button class="filter-clear-btn" onclick="clearFilter()">' +
+                '<i class="ph ph-x"></i> Clear filter' +
+                '</button>';
+            dashboard.insertBefore(filterHeader, dashboard.firstChild);
+        }
+        filterHeader.classList.add('active');
+        
+        // Update filter header info
+        var catTitle = document.querySelector('#' + catId + ' .et-cat-title');
+        var filterTitle = document.getElementById('filter-title');
+        var filterCount = document.getElementById('filter-count');
+        if (catTitle && filterTitle) {
+            filterTitle.textContent = catTitle.textContent.trim();
+        }
+        if (filterCount) {
+            var cardCount = document.querySelectorAll('#' + catId + ' .et-card').length;
+            filterCount.textContent = cardCount + ' tools';
+        }
+    }
+    
+    // Scroll to top of dashboard
+    if (dashboard) {
+        dashboard.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+}
+
+// Clear filter function
+window.clearFilter = function() {
+    var workspaceNav = document.querySelector('.nav-item[data-category="all"]');
+    if (workspaceNav) {
+        filterCategory('all', workspaceNav);
+    }
+};
 
 function setupThemeToggle() {
     // Apply saved theme on load
@@ -2757,29 +2847,10 @@ window.closeModals = function() {
 // ==========================================
 
 window.scrollToCat = function(catId) {
-    // Switch to home page first
-    switchPage('home');
-    // Highlight the nav item that was clicked
-    document.querySelectorAll('.nav-item[onclick]').forEach(function(item) {
-        item.classList.remove('active');
-        if (item.getAttribute('onclick') && item.getAttribute('onclick').indexOf(catId) !== -1) {
-            item.classList.add('active');
-        }
-    });
-    // Scroll the inner dashboard container (window doesn't scroll — main-content has overflow:hidden)
-    setTimeout(function() {
-        var el = document.getElementById(catId);
-        if (!el) return;
-        var dashboard = document.querySelector('.everytools-dashboard');
-        if (dashboard) {
-            var containerTop = dashboard.getBoundingClientRect().top;
-            var elTop = el.getBoundingClientRect().top;
-            var offset = elTop - containerTop + dashboard.scrollTop - 16;
-            dashboard.scrollTo({ top: offset, behavior: 'smooth' });
-        } else {
-            el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
-    }, 80);
+    var navItem = document.querySelector('.nav-item[data-category="' + catId + '"]');
+    if (navItem) {
+        filterCategory(catId, navItem);
+    }
 };
 
 // Handle radio changes — update dependent controls and clear output
