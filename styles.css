@@ -882,80 +882,105 @@ html, body {
 
 /* ── Scientific Calculator ── */
 .gt-scientific-calc {
-    max-width: 420px;
+    max-width: 380px;
     margin: 0 auto;
     background: var(--surface);
     border: 1px solid var(--border);
-    border-radius: 16px;
+    border-radius: 20px;
     overflow: hidden;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.15), 0 2px 8px rgba(0,0,0,0.08);
 }
 
 .calc-display {
     background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-    padding: 20px 24px;
-    min-height: 100px;
+    padding: 24px 28px;
+    min-height: 120px;
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
     align-items: flex-end;
+    position: relative;
+}
+
+.calc-display::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
 }
 
 .calc-expression {
-    font-size: 14px;
-    color: rgba(255,255,255,0.5);
-    font-family: 'SF Mono', 'Fira Code', monospace;
+    font-size: 15px;
+    color: rgba(255,255,255,0.45);
+    font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
     word-break: break-all;
     text-align: right;
-    min-height: 20px;
+    min-height: 22px;
     margin-bottom: 8px;
     max-width: 100%;
     overflow-x: auto;
+    letter-spacing: 0.5px;
 }
 
 .calc-result {
-    font-size: 36px;
-    font-weight: 700;
+    font-size: 42px;
+    font-weight: 600;
     color: #ffffff;
-    font-family: 'SF Mono', 'Fira Code', monospace;
+    font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
     word-break: break-all;
     text-align: right;
     max-width: 100%;
     overflow-x: auto;
+    line-height: 1.1;
 }
 
 .calc-buttons {
     display: grid;
     grid-template-columns: repeat(6, 1fr);
     gap: 1px;
-    background: var(--border);
+    background: rgba(0,0,0,0.06);
     padding: 1px;
 }
 
 .calc-btn {
     border: none;
-    padding: 16px 8px;
-    font-size: 15px;
+    padding: 18px 8px;
+    font-size: 16px;
     font-weight: 500;
     cursor: pointer;
-    transition: all 0.15s ease;
+    transition: all 0.12s ease;
     font-family: inherit;
     background: var(--surface);
     color: var(--tx1);
+    position: relative;
+    overflow: hidden;
 }
 
-.calc-btn:hover {
-    filter: brightness(0.95);
+.calc-btn::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(255,255,255,0.1);
+    opacity: 0;
+    transition: opacity 0.12s;
+}
+
+.calc-btn:hover::after {
+    opacity: 1;
 }
 
 .calc-btn:active {
-    transform: scale(0.96);
+    transform: scale(0.97);
 }
 
 .calc-num {
     background: var(--surface-2);
-    font-size: 18px;
+    font-size: 20px;
     font-weight: 600;
+    color: var(--tx1);
 }
 
 .calc-num:hover {
@@ -965,18 +990,19 @@ html, body {
 .calc-op {
     background: var(--accent);
     color: #ffffff;
-    font-size: 20px;
+    font-size: 22px;
     font-weight: 700;
 }
 
 .calc-op:hover {
-    filter: brightness(1.1);
+    filter: brightness(1.08);
 }
 
 .calc-fn {
     background: var(--surface);
     color: var(--tx2);
-    font-size: 13px;
+    font-size: 14px;
+    font-weight: 500;
 }
 
 .calc-fn:hover {
@@ -988,7 +1014,8 @@ html, body {
     background: #ef4444;
     color: #ffffff;
     font-weight: 700;
-    font-size: 14px;
+    font-size: 15px;
+    letter-spacing: 0.5px;
 }
 
 .calc-clear:hover {
@@ -998,7 +1025,7 @@ html, body {
 .calc-del {
     background: var(--surface-3);
     color: var(--tx2);
-    font-size: 18px;
+    font-size: 20px;
 }
 
 .calc-del:hover {
@@ -1008,19 +1035,42 @@ html, body {
 .calc-equals {
     background: linear-gradient(135deg, var(--accent) 0%, #0d9488 100%);
     color: #ffffff;
-    font-size: 24px;
+    font-size: 26px;
     font-weight: 700;
 }
 
 .calc-equals:hover {
-    filter: brightness(1.1);
+    filter: brightness(1.08);
+}
+
+/* Center the calculator in the tool container */
+.gt-tool-container:has(.gt-scientific-calc) {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 500px;
+}
+
+.gt-tool-container:has(.gt-scientific-calc) .gt-main-layout {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+.gt-tool-container:has(.gt-scientific-calc) .gt-control-area {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
 }
 
 /* Dark mode calculator */
 [data-theme="dark"] .gt-scientific-calc {
     background: #1e293b;
-    border-color: rgba(255,255,255,0.1);
-    box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+    border-color: rgba(255,255,255,0.08);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.4), 0 2px 8px rgba(0,0,0,0.2);
 }
 
 [data-theme="dark"] .calc-display {
@@ -1056,5 +1106,5 @@ html, body {
 }
 
 [data-theme="dark"] .calc-buttons {
-    background: rgba(255,255,255,0.05);
+    background: rgba(255,255,255,0.04);
 }
